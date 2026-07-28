@@ -1,433 +1,73 @@
--- DASRI-P | UNIVERSAL | Works in almost all games
--- Delta / Solara / Wave / any executor
-
+-- Script Aimbot Button (Delta)
 local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
-local Lighting = game:GetService("Lighting")
 
-local LocalPlayer = Players.LocalPlayer
-local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
-local Camera = workspace.CurrentCamera
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
 
--- Nettoyage
-if PlayerGui:FindFirstChild("DASRI_P") then
-    PlayerGui.DASRI_P:Destroy()
-end
+-- Création du ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "AimbotButtonGui"
+screenGui.ResetOnSpawn = false
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGui.Parent = playerGui
 
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "DASRI_P"
-ScreenGui.ResetOnSpawn = false
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-ScreenGui.Parent = PlayerGui
+-- Bouton principal
+local button = Instance.new("TextButton")
+button.Name = "AimbotButton"
+button.Size = UDim2.new(0, 160, 0, 50)
+button.Position = UDim2.new(0.5, -80, 0.5, -25) -- Centre de l'écran
+button.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+button.BorderSizePixel = 0
+button.Text = "aimbot"
+button.TextColor3 = Color3.fromRGB(255, 255, 255)
+button.TextScaled = true
+button.Font = Enum.Font.GothamBold
+button.AutoButtonColor = false
+button.Parent = screenGui
 
--------------------------------------------------
--- LOADING STYLÉ
--------------------------------------------------
-local LoadingFrame = Instance.new("Frame")
-LoadingFrame.Size = UDim2.new(1, 0, 1, 0)
-LoadingFrame.BackgroundColor3 = Color3.fromRGB(8, 8, 12)
-LoadingFrame.BorderSizePixel = 0
-LoadingFrame.Parent = ScreenGui
+-- Coins arrondis
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 12)
+corner.Parent = button
 
-local Logo = Instance.new("TextLabel")
-Logo.Size = UDim2.new(0, 420, 0, 80)
-Logo.Position = UDim2.new(0.5, -210, 0.32, 0)
-Logo.BackgroundTransparency = 1
-Logo.Text = "DASRI-P"
-Logo.TextColor3 = Color3.fromRGB(180, 80, 255)
-Logo.TextSize = 62
-Logo.Font = Enum.Font.GothamBlack
-Logo.TextStrokeTransparency = 0.5
-Logo.TextStrokeColor3 = Color3.fromRGB(100, 30, 180)
-Logo.Parent = LoadingFrame
+-- Gradient arc-en-ciel
+local gradient = Instance.new("UIGradient")
+gradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 0)),
+    ColorSequenceKeypoint.new(0.17, Color3.fromRGB(255, 127, 0)),
+    ColorSequenceKeypoint.new(0.33, Color3.fromRGB(255, 255, 0)),
+    ColorSequenceKeypoint.new(0.50, Color3.fromRGB(0, 255, 0)),
+    ColorSequenceKeypoint.new(0.67, Color3.fromRGB(0, 0, 255)),
+    ColorSequenceKeypoint.new(0.83, Color3.fromRGB(75, 0, 130)),
+    ColorSequenceKeypoint.new(1.00, Color3.fromRGB(148, 0, 211))
+})
+gradient.Rotation = 0
+gradient.Parent = button
 
-local SubTitle = Instance.new("TextLabel")
-SubTitle.Size = UDim2.new(0, 400, 0, 30)
-SubTitle.Position = UDim2.new(0.5, -200, 0.42, 0)
-SubTitle.BackgroundTransparency = 1
-SubTitle.Text = "UNIVERSAL LOADER..."
-SubTitle.TextColor3 = Color3.fromRGB(160, 160, 190)
-SubTitle.TextSize = 16
-SubTitle.Font = Enum.Font.Gotham
-SubTitle.Parent = LoadingFrame
-
-local ProgressBG = Instance.new("Frame")
-ProgressBG.Size = UDim2.new(0, 340, 0, 10)
-ProgressBG.Position = UDim2.new(0.5, -170, 0.55, 0)
-ProgressBG.BackgroundColor3 = Color3.fromRGB(25, 25, 38)
-ProgressBG.BorderSizePixel = 0
-ProgressBG.Parent = LoadingFrame
-Instance.new("UICorner", ProgressBG).CornerRadius = UDim.new(1, 0)
-
-local ProgressBar = Instance.new("Frame")
-ProgressBar.Size = UDim2.new(0, 0, 1, 0)
-ProgressBar.BackgroundColor3 = Color3.fromRGB(170, 70, 255)
-ProgressBar.BorderSizePixel = 0
-ProgressBar.Parent = ProgressBG
-Instance.new("UICorner", ProgressBar).CornerRadius = UDim.new(1, 0)
-
-local PercentLabel = Instance.new("TextLabel")
-PercentLabel.Size = UDim2.new(0, 100, 0, 25)
-PercentLabel.Position = UDim2.new(0.5, -50, 0.58, 18)
-PercentLabel.BackgroundTransparency = 1
-PercentLabel.Text = "0%"
-PercentLabel.TextColor3 = Color3.fromRGB(200, 180, 255)
-PercentLabel.TextSize = 15
-PercentLabel.Font = Enum.Font.GothamBold
-PercentLabel.Parent = LoadingFrame
-
--------------------------------------------------
--- MAIN PANEL
--------------------------------------------------
-local MainFrame = Instance.new("Frame")
-MainFrame.Name = "Main"
-MainFrame.Size = UDim2.new(0, 0, 0, 0)
-MainFrame.Position = UDim2.new(0.5, -195, 0.5, -230)
-MainFrame.BackgroundColor3 = Color3.fromRGB(13, 13, 19)
-MainFrame.BorderSizePixel = 0
-MainFrame.Visible = false
-MainFrame.ClipsDescendants = true
-MainFrame.Parent = ScreenGui
-Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 16)
-
-local MainStroke = Instance.new("UIStroke")
-MainStroke.Color = Color3.fromRGB(150, 60, 255)
-MainStroke.Thickness = 1.6
-MainStroke.Transparency = 0.25
-MainStroke.Parent = MainFrame
-
--- Header (draggable)
-local Header = Instance.new("Frame")
-Header.Size = UDim2.new(1, 0, 0, 50)
-Header.BackgroundColor3 = Color3.fromRGB(20, 16, 30)
-Header.BorderSizePixel = 0
-Header.Parent = MainFrame
-Instance.new("UICorner", Header).CornerRadius = UDim.new(0, 16)
-
-local HeaderFix = Instance.new("Frame")
-HeaderFix.Size = UDim2.new(1, 0, 0, 20)
-HeaderFix.Position = UDim2.new(0, 0, 1, -20)
-HeaderFix.BackgroundColor3 = Color3.fromRGB(20, 16, 30)
-HeaderFix.BorderSizePixel = 0
-HeaderFix.Parent = Header
-
-local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(1, -60, 1, 0)
-Title.Position = UDim2.new(0, 18, 0, 0)
-Title.BackgroundTransparency = 1
-Title.Text = "DASRI-P  •  UNIVERSAL"
-Title.TextColor3 = Color3.fromRGB(200, 130, 255)
-Title.TextSize = 18
-Title.Font = Enum.Font.GothamBlack
-Title.TextXAlignment = Enum.TextXAlignment.Left
-Title.Parent = Header
-
-local CloseBtn = Instance.new("TextButton")
-CloseBtn.Size = UDim2.new(0, 34, 0, 34)
-CloseBtn.Position = UDim2.new(1, -42, 0.5, -17)
-CloseBtn.BackgroundColor3 = Color3.fromRGB(40, 25, 55)
-CloseBtn.Text = "✕"
-CloseBtn.TextColor3 = Color3.fromRGB(255, 110, 130)
-CloseBtn.TextSize = 15
-CloseBtn.Font = Enum.Font.GothamBold
-CloseBtn.Parent = Header
-Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 8)
-
-CloseBtn.MouseButton1Click:Connect(function()
-    TweenService:Create(MainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
-        Size = UDim2.new(0, 0, 0, 0)
-    }):Play()
-    task.wait(0.35)
-    ScreenGui:Destroy()
+-- Animation du gradient (arc-en-ciel qui bouge de gauche à droite)
+local offset = 0
+RunService.RenderStepped:Connect(function(dt)
+    offset = (offset + dt * 0.6) % 1 -- Vitesse de l'animation
+    gradient.Offset = Vector2.new(offset, 0)
 end)
 
--- Container boutons
-local ButtonsContainer = Instance.new("ScrollingFrame")
-ButtonsContainer.Size = UDim2.new(1, -24, 1, -70)
-ButtonsContainer.Position = UDim2.new(0, 12, 0, 58)
-ButtonsContainer.BackgroundTransparency = 1
-ButtonsContainer.ScrollBarThickness = 4
-ButtonsContainer.ScrollBarImageColor3 = Color3.fromRGB(140, 60, 255)
-ButtonsContainer.CanvasSize = UDim2.new(0, 0, 0, 0)
-ButtonsContainer.AutomaticCanvasSize = Enum.AutomaticSize.Y
-ButtonsContainer.Parent = MainFrame
+-- Fonction pour rendre le bouton déplaçable
+local dragging = false
+local dragStart = nil
+local startPos = nil
 
-local UIList = Instance.new("UIListLayout")
-UIList.Padding = UDim.new(0, 9)
-UIList.HorizontalAlignment = Enum.HorizontalAlignment.Center
-UIList.Parent = ButtonsContainer
-
--------------------------------------------------
--- VARIABLES DES FONCTIONNALITÉS
--------------------------------------------------
-local ESPEnabled = false
-local SpeedEnabled = false
-local FlyEnabled = false
-local InfJumpEnabled = false
-local NoclipEnabled = false
-local KillAuraEnabled = false
-
-local ESPFolder = Instance.new("Folder")
-ESPFolder.Name = "DASRI_ESP"
-ESPFolder.Parent = ScreenGui
-
-local BodyVelocity = nil
-local FlyConnection = nil
-local NoclipConnection = nil
-local KillAuraConnection = nil
-local InfJumpConnection = nil
-
--------------------------------------------------
--- FONCTIONS UNIVERSELLES
--------------------------------------------------
-
--- ESP
-local function CreateESP(player)
-    if player == LocalPlayer then return end
-    if ESPFolder:FindFirstChild(player.Name) then return end
-
-    local highlight = Instance.new("Highlight")
-    highlight.Name = player.Name
-    highlight.FillColor = Color3.fromRGB(170, 70, 255)
-    highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
-    highlight.FillTransparency = 0.6
-    highlight.OutlineTransparency = 0
-    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-    highlight.Parent = ESPFolder
-
-    local billboard = Instance.new("BillboardGui")
-    billboard.Name = player.Name .. "_Name"
-    billboard.Size = UDim2.new(0, 200, 0, 40)
-    billboard.StudsOffset = Vector3.new(0, 3, 0)
-    billboard.AlwaysOnTop = true
-    billboard.Parent = ESPFolder
-
-    local nameLabel = Instance.new("TextLabel")
-    nameLabel.Size = UDim2.new(1, 0, 1, 0)
-    nameLabel.BackgroundTransparency = 1
-    nameLabel.Text = player.Name
-    nameLabel.TextColor3 = Color3.fromRGB(220, 180, 255)
-    nameLabel.TextSize = 14
-    nameLabel.Font = Enum.Font.GothamBold
-    nameLabel.TextStrokeTransparency = 0.5
-    nameLabel.Parent = billboard
-
-    local function update()
-        local char = player.Character
-        if char and char:FindFirstChild("HumanoidRootPart") then
-            highlight.Adornee = char
-            billboard.Adornee = char:FindFirstChild("Head") or char.HumanoidRootPart
-        end
-    end
-
-    update()
-    player.CharacterAdded:Connect(update)
-end
-
-local function ToggleESP(state)
-    ESPEnabled = state
-    if state then
-        for _, plr in pairs(Players:GetPlayers()) do
-            CreateESP(plr)
-        end
-        Players.PlayerAdded:Connect(CreateESP)
-    else
-        ESPFolder:ClearAllChildren()
-    end
-end
-
--- Speed
-local function ToggleSpeed(state)
-    SpeedEnabled = state
-    local char = LocalPlayer.Character
-    if char and char:FindFirstChildOfClass("Humanoid") then
-        char.Humanoid.WalkSpeed = state and 50 or 16
-    end
-end
-
-LocalPlayer.CharacterAdded:Connect(function(char)
-    task.wait(0.5)
-    if SpeedEnabled then
-        local hum = char:FindFirstChildOfClass("Humanoid")
-        if hum then hum.WalkSpeed = 50 end
-    end
-end)
-
--- Fly
-local function ToggleFly(state)
-    FlyEnabled = state
-    local char = LocalPlayer.Character
-    if not char then return end
-    local hrp = char:FindFirstChild("HumanoidRootPart")
-    local hum = char:FindFirstChildOfClass("Humanoid")
-    if not hrp or not hum then return end
-
-    if state then
-        BodyVelocity = Instance.new("BodyVelocity")
-        BodyVelocity.MaxForce = Vector3.new(9e9, 9e9, 9e9)
-        BodyVelocity.Velocity = Vector3.zero
-        BodyVelocity.Parent = hrp
-        hum.PlatformStand = true
-
-        FlyConnection = RunService.RenderStepped:Connect(function()
-            if not FlyEnabled or not BodyVelocity then return end
-            local cam = Camera.CFrame
-            local dir = Vector3.zero
-            if UserInputService:IsKeyDown(Enum.KeyCode.W) then dir += cam.LookVector end
-            if UserInputService:IsKeyDown(Enum.KeyCode.S) then dir -= cam.LookVector end
-            if UserInputService:IsKeyDown(Enum.KeyCode.A) then dir -= cam.RightVector end
-            if UserInputService:IsKeyDown(Enum.KeyCode.D) then dir += cam.RightVector end
-            if UserInputService:IsKeyDown(Enum.KeyCode.Space) then dir += Vector3.new(0, 1, 0) end
-            if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then dir -= Vector3.new(0, 1, 0) end
-            BodyVelocity.Velocity = dir.Magnitude > 0 and dir.Unit * 60 or Vector3.zero
-        end)
-    else
-        if BodyVelocity then BodyVelocity:Destroy() BodyVelocity = nil end
-        if FlyConnection then FlyConnection:Disconnect() FlyConnection = nil end
-        if hum then hum.PlatformStand = false end
-    end
-end
-
--- Infinite Jump
-local function ToggleInfJump(state)
-    InfJumpEnabled = state
-    if InfJumpConnection then InfJumpConnection:Disconnect() InfJumpConnection = nil end
-
-    if state then
-        InfJumpConnection = UserInputService.JumpRequest:Connect(function()
-            local char = LocalPlayer.Character
-            if char and char:FindFirstChildOfClass("Humanoid") then
-                char.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-            end
-        end)
-    end
-end
-
--- Noclip
-local function ToggleNoclip(state)
-    NoclipEnabled = state
-    if NoclipConnection then NoclipConnection:Disconnect() NoclipConnection = nil end
-
-    if state then
-        NoclipConnection = RunService.Stepped:Connect(function()
-            local char = LocalPlayer.Character
-            if char then
-                for _, part in pairs(char:GetDescendants()) do
-                    if part:IsA("BasePart") then
-                        part.CanCollide = false
-                    end
-                end
-            end
-        end)
-    end
-end
-
--- Kill Aura
-local function ToggleKillAura(state)
-    KillAuraEnabled = state
-    if KillAuraConnection then KillAuraConnection:Disconnect() KillAuraConnection = nil end
-
-    if state then
-        KillAuraConnection = RunService.Heartbeat:Connect(function()
-            local myChar = LocalPlayer.Character
-            if not myChar or not myChar:FindFirstChild("HumanoidRootPart") then return end
-            local myHRP = myChar.HumanoidRootPart
-
-            for _, plr in pairs(Players:GetPlayers()) do
-                if plr ~= LocalPlayer and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChildOfClass("Humanoid") then
-                    local dist = (myHRP.Position - plr.Character.HumanoidRootPart.Position).Magnitude
-                    if dist <= 15 then
-                        local hum = plr.Character.Humanoid
-                        if hum.Health > 0 then
-                            -- Méthode universelle (marche dans beaucoup de jeux)
-                            pcall(function()
-                                hum:TakeDamage(15)
-                            end)
-                            -- Alternative si TakeDamage est bloqué
-                            pcall(function()
-                                hum.Health = hum.Health - 8
-                            end)
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end
-
--------------------------------------------------
--- CRÉATION DES BOUTONS
--------------------------------------------------
-local function CreateToggleButton(text, color, getState, setState)
-    local Btn = Instance.new("TextButton")
-    Btn.Size = UDim2.new(1, 0, 0, 46)
-    Btn.BackgroundColor3 = Color3.fromRGB(26, 22, 38)
-    Btn.Text = text .. "  [OFF]"
-    Btn.TextColor3 = Color3.fromRGB(210, 200, 255)
-    Btn.TextSize = 14
-    Btn.Font = Enum.Font.GothamBold
-    Btn.AutoButtonColor = false
-    Btn.Parent = ButtonsContainer
-    Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 10)
-
-    local Stroke = Instance.new("UIStroke")
-    Stroke.Color = color
-    Stroke.Thickness = 1.3
-    Stroke.Transparency = 0.45
-    Stroke.Parent = Btn
-
-    local function updateVisual()
-        if getState() then
-            Btn.Text = text .. "  [ON]"
-            Btn.BackgroundColor3 = Color3.fromRGB(45, 30, 75)
-            Stroke.Transparency = 0.1
-        else
-            Btn.Text = text .. "  [OFF]"
-            Btn.BackgroundColor3 = Color3.fromRGB(26, 22, 38)
-            Stroke.Transparency = 0.45
-        end
-    end
-
-    Btn.MouseEnter:Connect(function()
-        if not getState() then
-            TweenService:Create(Btn, TweenInfo.new(0.18), {BackgroundColor3 = Color3.fromRGB(38, 30, 58)}):Play()
-        end
-    end)
-    Btn.MouseLeave:Connect(function()
-        updateVisual()
-    end)
-
-    Btn.MouseButton1Click:Connect(function()
-        setState(not getState())
-        updateVisual()
-    end)
-
-    return Btn
-end
-
-CreateToggleButton("ESP PLAYERS", Color3.fromRGB(180, 80, 255), function() return ESPEnabled end, ToggleESP)
-CreateToggleButton("SPEED BOOST", Color3.fromRGB(80, 200, 255), function() return SpeedEnabled end, ToggleSpeed)
-CreateToggleButton("FLY (WASD + Space)", Color3.fromRGB(80, 255, 170), function() return FlyEnabled end, ToggleFly)
-CreateToggleButton("INFINITE JUMP", Color3.fromRGB(255, 180, 70), function() return InfJumpEnabled end, ToggleInfJump)
-CreateToggleButton("NOCLIP", Color3.fromRGB(255, 100, 160), function() return NoclipEnabled end, ToggleNoclip)
-CreateToggleButton("KILL AURA (15 studs)", Color3.fromRGB(255, 70, 90), function() return KillAuraEnabled end, ToggleKillAura)
-
--------------------------------------------------
--- DRAGGABLE
--------------------------------------------------
-local dragging, dragStart, startPos = false, nil, nil
-
-Header.InputBegan:Connect(function(input)
+button.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         dragging = true
         dragStart = input.Position
-        startPos = MainFrame.Position
+        startPos = button.Position
     end
 end)
 
-Header.InputEnded:Connect(function(input)
+button.InputEnded:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         dragging = false
     end
@@ -436,39 +76,23 @@ end)
 UserInputService.InputChanged:Connect(function(input)
     if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
         local delta = input.Position - dragStart
-        MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        button.Position = UDim2.new(
+            startPos.X.Scale,
+            startPos.X.Offset + delta.X,
+            startPos.Y.Scale,
+            startPos.Y.Offset + delta.Y
+        )
     end
 end)
 
--------------------------------------------------
--- LOADING ANIMATION
--------------------------------------------------
-task.spawn(function()
-    for i = 0, 100 do
-        ProgressBar.Size = UDim2.new(i / 100, 0, 1, 0)
-        PercentLabel.Text = i .. "%"
-        if i == 30 then SubTitle.Text = "LOADING MODULES..." end
-        if i == 60 then SubTitle.Text = "INJECTING UNIVERSAL..." end
-        if i == 90 then SubTitle.Text = "READY" end
-        task.wait(0.015)
-    end
-    task.wait(0.35)
+-- Activation de l'aimbot au clic
+button.MouseButton1Click:Connect(function()
+    -- Ton code aimbot
+    local cible = TrouverEnnemiLePlusProche()
 
-    TweenService:Create(LoadingFrame, TweenInfo.new(0.55), {BackgroundTransparency = 1}):Play()
-    for _, v in pairs(LoadingFrame:GetDescendants()) do
-        if v:IsA("TextLabel") or v:IsA("Frame") then
-            pcall(function()
-                TweenService:Create(v, TweenInfo.new(0.45), {BackgroundTransparency = 1, TextTransparency = 1}):Play()
-            end)
-        end
+    if cible then
+        ViserVers(cible.Position)
     end
-    task.wait(0.6)
-    LoadingFrame:Destroy()
-
-    MainFrame.Visible = true
-    TweenService:Create(MainFrame, TweenInfo.new(0.55, Enum.EasingStyle.Back), {
-        Size = UDim2.new(0, 390, 0, 460)
-    }):Play()
 end)
 
-print("[DASRI-P] Universal loaded successfully")
+print("Bouton Aimbot chargé ! Tu peux le déplacer et cliquer dessus.")
