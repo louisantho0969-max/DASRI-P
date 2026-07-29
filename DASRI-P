@@ -1,155 +1,21 @@
--- Script Aimbot Button (Delta) - Version mise à jour
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
 
-local LocalPlayer = Players.LocalPlayer
-local playerGui = LocalPlayer:WaitForChild("PlayerGui")
+   SERVICES
+Joueurs locaux = game:GetService( "Joueurs" )
+local RunService = game:GetService( "RunService" )
+local UserInputService = game:GetService( "UserInputService" )
+local CoreGui = game:GetService( "CoreGui" )
 
--- Création du ScreenGui
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "AimbotButtonGui"
-screenGui.ResetOnSpawn = false
-screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-screenGui.Parent = playerGui
+VARIABLES
+local LocalPlayer = Joueurs.LocalPlayer
+Caméra locale = espace de travail.CurrentCamera
+local activé = faux
 
--- Bouton principal
-local button = Instance.new("TextButton")
-button.Name = "AimbotButton"
-button.Size = UDim2.new(0, 160, 0, 50)
-button.Position = UDim2.new(0.5, -80, 0.5, -25)
-button.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-button.BorderSizePixel = 0
-button.Text = "aimbot"
-button.TextColor3 = Color3.fromRGB(255, 255, 255)
-button.TextScaled = true
-button.Font = Enum.Font.GothamBold
-button.AutoButtonColor = false
-button.Parent = screenGui
+ CONSTRUCTION DE L'interface graphique
+local ScreenGui = Instance.new( "ScreenGui" )
+ScreenGui.Name = "DeltaToggleGui"
+ScreenGui.Parent = CoreGui
+ScreenGui.ResetOnSpawn = faux
 
--- Coins arrondis
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 12)
-corner.Parent = button
+local MainButton = Instance.new( "TextButton" )
 
--- Gradient arc-en-ciel
-local gradient = Instance.new("UIGradient")
-gradient.Color = ColorSequence.new({
-	ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 0)),
-	ColorSequenceKeypoint.new(0.17, Color3.fromRGB(255, 127, 0)),
-	ColorSequenceKeypoint.new(0.33, Color3.fromRGB(255, 255, 0)),
-	ColorSequenceKeypoint.new(0.50, Color3.fromRGB(0, 255, 0)),
-	ColorSequenceKeypoint.new(0.67, Color3.fromRGB(0, 0, 255)),
-	ColorSequenceKeypoint.new(0.83, Color3.fromRGB(75, 0, 130)),
-	ColorSequenceKeypoint.new(1.00, Color3.fromRGB(148, 0, 211))
-})
-gradient.Rotation = 0
-gradient.Parent = button
-
--- Animation du gradient (arc-en-ciel qui bouge)
-local offset = 0
-RunService.RenderStepped:Connect(function(dt)
-	offset = (offset + dt * 0.6) % 1
-	gradient.Offset = Vector2.new(offset, 0)
-end)
-
--- Rendre le bouton déplaçable
-local dragging = false
-local dragStart = nil
-local startPos = nil
-
-button.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = true
-		dragStart = input.Position
-		startPos = button.Position
-	end
-end)
-
-button.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = false
-	end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-	if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-		local delta = input.Position - dragStart
-		button.Position = UDim2.new(
-			startPos.X.Scale,
-			startPos.X.Offset + delta.X,
-			startPos.Y.Scale,
-			startPos.Y.Offset + delta.Y
-		)
-	end
-end)
-
--- ========== AIMBOT ==========
-local aimbotActive = false
-local aimbotConnection = nil
-
-local function getClosestPlayer()
-	local closest
-	local closestDistance = math.huge
-
-	for _, player in ipairs(Players:GetPlayers()) do
-		if player ~= LocalPlayer
-			and player.Character
-			and player.Character:FindFirstChild("HumanoidRootPart") then
-
-			local myRoot = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-			local targetRoot = player.Character.HumanoidRootPart
-
-			if myRoot then
-				local distance = (myRoot.Position - targetRoot.Position).Magnitude
-				if distance < closestDistance then
-					closestDistance = distance
-					closest = player
-				end
-			end
-		end
-	end
-
-	return closest
-end
-
-local function startAimbot()
-	if aimbotActive then return end
-	aimbotActive = true
-	button.Text = "aimbot ON"
-
-	aimbotConnection = RunService.Heartbeat:Connect(function()
-		local target = getClosestPlayer()
-
-		if target and LocalPlayer.Character then
-			local myRoot = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-			local targetRoot = target.Character and target.Character:FindFirstChild("HumanoidRootPart")
-
-			if myRoot and targetRoot then
-				myRoot.CFrame = CFrame.lookAt(myRoot.Position, targetRoot.Position)
-			end
-		end
-	end)
-end
-
-local function stopAimbot()
-	if not aimbotActive then return end
-	aimbotActive = false
-	button.Text = "aimbot"
-
-	if aimbotConnection then
-		aimbotConnection:Disconnect()
-		aimbotConnection = nil
-	end
-end
-
--- Clic = Active / Désactive l'aimbot
-button.MouseButton1Click:Connect(function()
-	if aimbotActive then
-		stopAimbot()
-	else
-		startAimbot()
-	end
-end)
-
-print("Bouton Aimbot chargé ! Clique pour activer/désactiver.")
+```
