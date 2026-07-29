@@ -1,21 +1,21 @@
-
-   SERVICES
 Joueurs locaux = game:GetService( "Joueurs" )
 local RunService = game:GetService( "RunService" )
 local UserInputService = game:GetService( "UserInputService" )
 local CoreGui = game:GetService( "CoreGui" )
 
-VARIABLES
 local LocalPlayer = Joueurs.LocalPlayer
 Caméra locale = espace de travail.CurrentCamera
 local activé = faux
 
  CONSTRUCTION DE L'interface graphique
 local ScreenGui = Instance.new( "ScreenGui" )
+
 ScreenGui.Name = "DeltaToggleGui"
 ScreenGui.Parent = CoreGui
 ScreenGui.ResetOnSpawn = faux
 
 local MainButton = Instance.new( "TextButton" )
-
-```
+MainButton.Size = UDim2.new(0, 100, 0, 50)
+MainButton.Position = UDim2.new(0.5, 50, 0.5, 25)
+MainButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+MainButton.Text = "DÉSACTIVÉ"
