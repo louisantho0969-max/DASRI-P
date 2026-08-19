@@ -1,3 +1,6 @@
+--// KEY SYSTEM + GROK MENU
+--// Pour ton propre jeu Roblox
+
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
@@ -5,8 +8,409 @@ local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
+--==================================================
+-- CONFIGURATION
+--==================================================
+
 local CORRECT_KEY = "3257-HACK"
 local DISCORD_LINK = "https://discord.gg/vxd3pA97n"
+
+--==================================================
+-- FONCTION : GROK MENU
+--==================================================
+
+local function createGrokMenu()
+
+	local flying = false
+	local noclipping = false
+	local infiniteJump = false
+	local flySpeed = 60
+
+	local bodyVel
+	local bodyGyro
+	local flyConnection
+	local noclipConnection
+
+	local camera = workspace.CurrentCamera
+
+	--==================================================
+	-- CHARGEMENT
+	--==================================================
+
+	local loadGui = Instance.new("ScreenGui")
+	loadGui.Name = "GrokLoad"
+	loadGui.ResetOnSpawn = false
+	loadGui.Parent = playerGui
+
+	local loadFrame = Instance.new("Frame")
+	loadFrame.Size = UDim2.new(0, 380, 0, 160)
+	loadFrame.Position = UDim2.new(0.5, -190, 0.5, -80)
+	loadFrame.BackgroundColor3 = Color3.fromRGB(12, 12, 22)
+	loadFrame.BorderSizePixel = 0
+	loadFrame.Parent = loadGui
+
+	Instance.new("UICorner", loadFrame).CornerRadius = UDim.new(0, 18)
+
+	local loadTitle = Instance.new("TextLabel")
+	loadTitle.Size = UDim2.new(1, 0, 0.45, 0)
+	loadTitle.BackgroundTransparency = 1
+	loadTitle.Text = "GROK MENU"
+	loadTitle.TextColor3 = Color3.fromRGB(0, 255, 200)
+	loadTitle.Font = Enum.Font.GothamBlack
+	loadTitle.TextScaled = true
+	loadTitle.Parent = loadFrame
+
+	local barBg = Instance.new("Frame")
+	barBg.Size = UDim2.new(0.8, 0, 0.1, 0)
+	barBg.Position = UDim2.new(0.1, 0, 0.7, 0)
+	barBg.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
+	barBg.BorderSizePixel = 0
+	barBg.Parent = loadFrame
+
+	Instance.new("UICorner", barBg).CornerRadius = UDim.new(0, 6)
+
+	local bar = Instance.new("Frame")
+	bar.Size = UDim2.new(0, 0, 1, 0)
+	bar.BackgroundColor3 = Color3.fromRGB(0, 255, 180)
+	bar.BorderSizePixel = 0
+	bar.Parent = barBg
+
+	Instance.new("UICorner", bar).CornerRadius = UDim.new(0, 6)
+
+	for i = 1, 100 do
+		bar.Size = UDim2.new(i / 100, 0, 1, 0)
+		task.wait(0.012)
+	end
+
+	loadGui:Destroy()
+
+	--==================================================
+	-- PANEL PRINCIPAL
+	--==================================================
+
+	local gui = Instance.new("ScreenGui")
+	gui.Name = "GrokPanel"
+	gui.ResetOnSpawn = false
+	gui.Parent = playerGui
+
+	local main = Instance.new("Frame")
+	main.Size = UDim2.new(0, 340, 0, 420)
+	main.Position = UDim2.new(0.5, -170, 0.5, -210)
+	main.BackgroundColor3 = Color3.fromRGB(15, 15, 28)
+	main.BorderSizePixel = 0
+	main.Active = true
+	main.Draggable = true
+	main.Parent = gui
+
+	Instance.new("UICorner", main).CornerRadius = UDim.new(0, 16)
+
+	local stroke = Instance.new("UIStroke")
+	stroke.Color = Color3.fromRGB(0, 255, 200)
+	stroke.Thickness = 2
+	stroke.Transparency = 0.3
+	stroke.Parent = main
+
+	local title = Instance.new("TextLabel")
+	title.Size = UDim2.new(1, 0, 0, 50)
+	title.BackgroundTransparency = 1
+	title.Text = "GROK MENU"
+	title.TextColor3 = Color3.fromRGB(0, 255, 200)
+	title.Font = Enum.Font.GothamBlack
+	title.TextScaled = true
+	title.Parent = main
+
+	--==================================================
+	-- CLOSE
+	--==================================================
+
+	local close = Instance.new("TextButton")
+	close.Size = UDim2.new(0, 36, 0, 36)
+	close.Position = UDim2.new(1, -42, 0, 7)
+	close.BackgroundColor3 = Color3.fromRGB(255, 60, 60)
+	close.Text = "X"
+	close.TextColor3 = Color3.new(1, 1, 1)
+	close.Font = Enum.Font.GothamBold
+	close.TextScaled = true
+	close.Parent = main
+
+	Instance.new("UICorner", close).CornerRadius = UDim.new(0, 10)
+
+	--==================================================
+	-- BOUTONS
+	--==================================================
+
+	local function makeBtn(text, y)
+
+		local btn = Instance.new("TextButton")
+		btn.Size = UDim2.new(0.85, 0, 0, 48)
+		btn.Position = UDim2.new(0.075, 0, 0, y)
+		btn.BackgroundColor3 = Color3.fromRGB(25, 25, 45)
+		btn.Text = text
+		btn.TextColor3 = Color3.new(1, 1, 1)
+		btn.Font = Enum.Font.GothamSemibold
+		btn.TextScaled = true
+		btn.Parent = main
+
+		Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 12)
+
+		local buttonStroke = Instance.new("UIStroke")
+		buttonStroke.Color = Color3.fromRGB(0, 200, 255)
+		buttonStroke.Thickness = 1.5
+		buttonStroke.Transparency = 0.5
+		buttonStroke.Parent = btn
+
+		return btn
+	end
+
+	local flyBtn = makeBtn("FLY : OFF", 70)
+	local noclipBtn = makeBtn("NOCLIP : OFF", 130)
+	local jumpBtn = makeBtn("INFINITE JUMP : OFF", 190)
+	local speedBtn = makeBtn("SPEED +", 250)
+	local resetBtn = makeBtn("RESET CHARACTER", 310)
+
+	--==================================================
+	-- FLY
+	--==================================================
+
+	local function startFly()
+
+		if flying then
+			return
+		end
+
+		flying = true
+
+		flyBtn.Text = "FLY : ON"
+		flyBtn.BackgroundColor3 = Color3.fromRGB(0, 160, 100)
+
+		local char = player.Character or player.CharacterAdded:Wait()
+		local root = char:WaitForChild("HumanoidRootPart")
+		local humanoid = char:WaitForChild("Humanoid")
+
+		humanoid.PlatformStand = true
+
+		bodyVel = Instance.new("BodyVelocity")
+		bodyVel.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+		bodyVel.Velocity = Vector3.zero
+		bodyVel.Parent = root
+
+		bodyGyro = Instance.new("BodyGyro")
+		bodyGyro.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
+		bodyGyro.P = 100000
+		bodyGyro.Parent = root
+
+		flyConnection = RunService.RenderStepped:Connect(function()
+
+			if not flying or not root.Parent then
+				return
+			end
+
+			local dir = Vector3.zero
+
+			if UserInputService:IsKeyDown(Enum.KeyCode.W) then
+				dir += camera.CFrame.LookVector
+			end
+
+			if UserInputService:IsKeyDown(Enum.KeyCode.S) then
+				dir -= camera.CFrame.LookVector
+			end
+
+			if UserInputService:IsKeyDown(Enum.KeyCode.A) then
+				dir -= camera.CFrame.RightVector
+			end
+
+			if UserInputService:IsKeyDown(Enum.KeyCode.D) then
+				dir += camera.CFrame.RightVector
+			end
+
+			if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
+				dir += Vector3.new(0, 1, 0)
+			end
+
+			if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then
+				dir -= Vector3.new(0, 1, 0)
+			end
+
+			if dir.Magnitude > 0 then
+				bodyVel.Velocity = dir.Unit * flySpeed
+			else
+				bodyVel.Velocity = Vector3.zero
+			end
+
+			bodyGyro.CFrame = camera.CFrame
+		end)
+	end
+
+	local function stopFly()
+
+		flying = false
+
+		flyBtn.Text = "FLY : OFF"
+		flyBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 45)
+
+		if flyConnection then
+			flyConnection:Disconnect()
+			flyConnection = nil
+		end
+
+		if bodyVel then
+			bodyVel:Destroy()
+			bodyVel = nil
+		end
+
+		if bodyGyro then
+			bodyGyro:Destroy()
+			bodyGyro = nil
+		end
+
+		local char = player.Character
+
+		if char then
+			local humanoid = char:FindFirstChild("Humanoid")
+
+			if humanoid then
+				humanoid.PlatformStand = false
+			end
+		end
+	end
+
+	flyBtn.MouseButton1Click:Connect(function()
+
+		if flying then
+			stopFly()
+		else
+			startFly()
+		end
+
+	end)
+
+	--==================================================
+	-- NOCLIP
+	--==================================================
+
+	noclipBtn.MouseButton1Click:Connect(function()
+
+		noclipping = not noclipping
+
+		if noclipping then
+
+			noclipBtn.Text = "NOCLIP : ON"
+			noclipBtn.BackgroundColor3 = Color3.fromRGB(0, 160, 100)
+
+			noclipConnection = RunService.Stepped:Connect(function()
+
+				local char = player.Character
+
+				if char then
+					for _, part in ipairs(char:GetDescendants()) do
+						if part:IsA("BasePart") then
+							part.CanCollide = false
+						end
+					end
+				end
+
+			end)
+
+		else
+
+			noclipBtn.Text = "NOCLIP : OFF"
+			noclipBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 45)
+
+			if noclipConnection then
+				noclipConnection:Disconnect()
+				noclipConnection = nil
+			end
+
+		end
+
+	end)
+
+	--==================================================
+	-- INFINITE JUMP
+	--==================================================
+
+	jumpBtn.MouseButton1Click:Connect(function()
+
+		infiniteJump = not infiniteJump
+
+		if infiniteJump then
+			jumpBtn.Text = "INFINITE JUMP : ON"
+			jumpBtn.BackgroundColor3 = Color3.fromRGB(0, 160, 100)
+		else
+			jumpBtn.Text = "INFINITE JUMP : OFF"
+			jumpBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 45)
+		end
+
+	end)
+
+	local jumpConnection = UserInputService.JumpRequest:Connect(function()
+
+		if infiniteJump then
+
+			local char = player.Character
+			local humanoid = char and char:FindFirstChild("Humanoid")
+
+			if humanoid then
+				humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+			end
+
+		end
+
+	end)
+
+	--==================================================
+	-- SPEED
+	--==================================================
+
+	speedBtn.MouseButton1Click:Connect(function()
+
+		local char = player.Character
+		local humanoid = char and char:FindFirstChild("Humanoid")
+
+		if humanoid then
+			humanoid.WalkSpeed = 100
+			speedBtn.Text = "SPEED : 100"
+		end
+
+	end)
+
+	--==================================================
+	-- RESET
+	--==================================================
+
+	resetBtn.MouseButton1Click:Connect(function()
+
+		local char = player.Character
+
+		if char then
+			char:BreakJoints()
+		end
+
+	end)
+
+	--==================================================
+	-- FERMETURE
+	--==================================================
+
+	close.MouseButton1Click:Connect(function()
+
+		stopFly()
+
+		if noclipConnection then
+			noclipConnection:Disconnect()
+			noclipConnection = nil
+		end
+
+		if jumpConnection then
+			jumpConnection:Disconnect()
+		end
+
+		gui:Destroy()
+
+	end)
+
+	print("Grok Menu chargé !")
+end
 
 --==================================================
 -- KEY SYSTEM
@@ -15,22 +419,21 @@ local DISCORD_LINK = "https://discord.gg/vxd3pA97n"
 local keyGui = Instance.new("ScreenGui")
 keyGui.Name = "KeySystem"
 keyGui.ResetOnSpawn = false
+keyGui.IgnoreGuiInset = true
 keyGui.Parent = playerGui
 
 local main = Instance.new("Frame")
-main.Size = UDim2.fromOffset(400, 230)
+main.Size = UDim2.new(0, 400, 0, 230)
 main.Position = UDim2.new(0.5, -200, 0.5, -115)
 main.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
 main.BorderSizePixel = 0
 main.Parent = keyGui
 
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 12)
-corner.Parent = main
+Instance.new("UICorner", main).CornerRadius = UDim.new(0, 12)
 
 local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, -60, 0, 45)
-title.Position = UDim2.fromOffset(15, 5)
+title.Size = UDim2.new(1, -50, 0, 45)
+title.Position = UDim2.new(0, 15, 0, 5)
 title.BackgroundTransparency = 1
 title.Text = "KEY SYSTEM"
 title.TextColor3 = Color3.new(1, 1, 1)
@@ -40,7 +443,7 @@ title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = main
 
 local close = Instance.new("TextButton")
-close.Size = UDim2.fromOffset(35, 35)
+close.Size = UDim2.new(0, 35, 0, 35)
 close.Position = UDim2.new(1, -43, 0, 10)
 close.BackgroundColor3 = Color3.fromRGB(45, 45, 50)
 close.Text = "X"
@@ -51,9 +454,13 @@ close.Parent = main
 
 Instance.new("UICorner", close).CornerRadius = UDim.new(0, 8)
 
+close.MouseButton1Click:Connect(function()
+	keyGui:Destroy()
+end)
+
 local keyBox = Instance.new("TextBox")
 keyBox.Size = UDim2.new(1, -40, 0, 45)
-keyBox.Position = UDim2.fromOffset(20, 65)
+keyBox.Position = UDim2.new(0, 20, 0, 65)
 keyBox.BackgroundColor3 = Color3.fromRGB(35, 35, 42)
 keyBox.BorderSizePixel = 0
 keyBox.PlaceholderText = "Enter your key..."
@@ -68,7 +475,7 @@ Instance.new("UICorner", keyBox).CornerRadius = UDim.new(0, 8)
 
 local check = Instance.new("TextButton")
 check.Size = UDim2.new(0.48, -5, 0, 45)
-check.Position = UDim2.fromOffset(20, 125)
+check.Position = UDim2.new(0, 20, 0, 125)
 check.BackgroundColor3 = Color3.fromRGB(60, 120, 255)
 check.Text = "Check Key"
 check.TextColor3 = Color3.new(1, 1, 1)
@@ -92,7 +499,7 @@ Instance.new("UICorner", getKey).CornerRadius = UDim.new(0, 8)
 
 local status = Instance.new("TextLabel")
 status.Size = UDim2.new(1, -40, 0, 30)
-status.Position = UDim2.fromOffset(20, 180)
+status.Position = UDim2.new(0, 20, 0, 180)
 status.BackgroundTransparency = 1
 status.Text = ""
 status.TextColor3 = Color3.fromRGB(180, 180, 180)
@@ -101,185 +508,37 @@ status.Font = Enum.Font.Gotham
 status.Parent = main
 
 --==================================================
--- FLY PANEL
---==================================================
-
-local function createFlyPanel()
-
-	local gui = Instance.new("ScreenGui")
-	gui.Name = "FlyPanel"
-	gui.ResetOnSpawn = false
-	gui.Parent = playerGui
-
-	local frame = Instance.new("Frame")
-	frame.Size = UDim2.fromOffset(250, 220)
-	frame.Position = UDim2.new(0.5, -125, 0.25, 0)
-	frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-	frame.BorderSizePixel = 0
-	frame.Active = true
-	frame.Draggable = true
-	frame.Parent = gui
-
-	Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
-
-	local title = Instance.new("TextLabel")
-	title.Size = UDim2.new(1, 0, 0, 40)
-	title.BackgroundTransparency = 1
-	title.Text = "🌈 Fly Panel"
-	title.TextColor3 = Color3.new(1, 1, 1)
-	title.Font = Enum.Font.GothamBold
-	title.TextScaled = true
-	title.Parent = frame
-
-	local fly = Instance.new("TextButton")
-	fly.Size = UDim2.new(0.8, 0, 0, 45)
-	fly.Position = UDim2.new(0.1, 0, 0.25, 0)
-	fly.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-	fly.Text = "FLY ON"
-	fly.TextColor3 = Color3.new(1, 1, 1)
-	fly.Font = Enum.Font.GothamBold
-	fly.TextScaled = true
-	fly.Parent = frame
-
-	Instance.new("UICorner", fly).CornerRadius = UDim.new(0, 10)
-
-	local jump = Instance.new("TextButton")
-	jump.Size = UDim2.new(0.8, 0, 0, 45)
-	jump.Position = UDim2.new(0.1, 0, 0.50, 0)
-	jump.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
-	jump.Text = "INFINITE JUMP ON"
-	jump.TextColor3 = Color3.new(1, 1, 1)
-	jump.Font = Enum.Font.GothamBold
-	jump.TextScaled = true
-	jump.Parent = frame
-
-	Instance.new("UICorner", jump).CornerRadius = UDim.new(0, 10)
-
-	local closePanel = Instance.new("TextButton")
-	closePanel.Size = UDim2.new(0.8, 0, 0, 35)
-	closePanel.Position = UDim2.new(0.1, 0, 0.76, 0)
-	closePanel.BackgroundColor3 = Color3.fromRGB(180, 40, 40)
-	closePanel.Text = "CLOSE"
-	closePanel.TextColor3 = Color3.new(1, 1, 1)
-	closePanel.Font = Enum.Font.GothamBold
-	closePanel.TextScaled = true
-	closePanel.Parent = frame
-
-	Instance.new("UICorner", closePanel).CornerRadius = UDim.new(0, 10)
-
-	-- Fly
-	local flying = false
-	local flyConnection
-
-	fly.MouseButton1Click:Connect(function()
-
-		flying = not flying
-
-		if flying then
-			fly.Text = "FLY OFF"
-			fly.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
-
-			flyConnection = RunService.RenderStepped:Connect(function()
-
-				local character = player.Character
-				local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-				local root = character and character:FindFirstChild("HumanoidRootPart")
-
-				if not humanoid or not root then
-					return
-				end
-
-				root.AssemblyLinearVelocity =
-					humanoid.MoveDirection * 50
-			end)
-
-		else
-			fly.Text = "FLY ON"
-			fly.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-
-			if flyConnection then
-				flyConnection:Disconnect()
-				flyConnection = nil
-			end
-		end
-	end)
-
-	-- Infinite Jump
-	local infiniteJump = false
-	local jumpConnection
-
-	jump.MouseButton1Click:Connect(function()
-
-		infiniteJump = not infiniteJump
-
-		if infiniteJump then
-			jump.Text = "INFINITE JUMP OFF"
-			jump.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
-
-			jumpConnection = UserInputService.JumpRequest:Connect(function()
-
-				if not infiniteJump then
-					return
-				end
-
-				local character = player.Character
-				local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-
-				if humanoid then
-					humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-				end
-			end)
-
-		else
-			jump.Text = "INFINITE JUMP ON"
-			jump.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
-
-			if jumpConnection then
-				jumpConnection:Disconnect()
-				jumpConnection = nil
-			end
-		end
-	end)
-
-	closePanel.MouseButton1Click:Connect(function()
-
-		if flyConnection then
-			flyConnection:Disconnect()
-		end
-
-		if jumpConnection then
-			jumpConnection:Disconnect()
-		end
-
-		gui:Destroy()
-	end)
-end
-
---==================================================
 -- VALIDATION
 --==================================================
 
 check.MouseButton1Click:Connect(function()
 
-	local enteredKey = keyBox.Text:gsub("^%s+", ""):gsub("%s+$", "")
+	local enteredKey = keyBox.Text
+	enteredKey = enteredKey:gsub("^%s+", ""):gsub("%s+$", "")
 
 	if enteredKey == CORRECT_KEY then
 
 		status.Text = "Key accepted!"
 		status.TextColor3 = Color3.fromRGB(80, 255, 120)
 
+		check.Active = false
+		getKey.Active = false
+
 		task.wait(1)
 
+		-- Le Key System disparaît
 		keyGui:Destroy()
 
-		-- Le Fly Panel apparaît ici
-		createFlyPanel()
+		-- Le Grok Menu apparaît
+		createGrokMenu()
 
 	else
 
 		status.Text = "Invalid key."
 		status.TextColor3 = Color3.fromRGB(255, 80, 80)
+
 	end
+
 end)
 
 --==================================================
