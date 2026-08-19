@@ -1,58 +1,58 @@
---// KEY SYSTEM - TON PROPRE JEU ROBLOX
+--// KEY SYSTEM + FLY PANEL
+--// Pour ton propre jeu Roblox
 
 local Players = game:GetService("Players")
-local GuiService = game:GetService("GuiService")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
 local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
 
---========================
--- CONFIGURATION
---========================
+--==================================================
+-- CONFIG
+--==================================================
 
-local CORRECT_KEY = "5377-HACK"
-local GET_KEY_URL = "https://discord.gg/A3K"
+local CORRECT_KEY = "3257-HACK"
+local DISCORD_LINK = "https://discord.gg/vxd3pA97n"
 
---========================
--- GUI
---========================
+--==================================================
+-- KEY SYSTEM
+--==================================================
 
-local gui = Instance.new("ScreenGui")
-gui.Name = "KeySystem"
-gui.ResetOnSpawn = false
-gui.IgnoreGuiInset = true
-gui.Parent = player:WaitForChild("PlayerGui")
+local keyGui = Instance.new("ScreenGui")
+keyGui.Name = "KeySystem"
+keyGui.ResetOnSpawn = false
+keyGui.IgnoreGuiInset = true
+keyGui.Parent = playerGui
 
 local main = Instance.new("Frame")
-main.Name = "Main"
 main.Size = UDim2.new(0, 400, 0, 230)
 main.Position = UDim2.new(0.5, -200, 0.5, -115)
 main.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
 main.BorderSizePixel = 0
-main.Parent = gui
+main.Parent = keyGui
 
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 12)
-corner.Parent = main
+local mainCorner = Instance.new("UICorner")
+mainCorner.CornerRadius = UDim.new(0, 12)
+mainCorner.Parent = main
 
--- TITRE
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, -50, 0, 45)
 title.Position = UDim2.new(0, 15, 0, 5)
 title.BackgroundTransparency = 1
 title.Text = "KEY SYSTEM"
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextColor3 = Color3.new(1, 1, 1)
 title.TextSize = 24
 title.Font = Enum.Font.GothamBold
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = main
 
--- FERMER
 local close = Instance.new("TextButton")
 close.Size = UDim2.new(0, 35, 0, 35)
 close.Position = UDim2.new(1, -43, 0, 10)
 close.BackgroundColor3 = Color3.fromRGB(45, 45, 50)
 close.Text = "X"
-close.TextColor3 = Color3.fromRGB(255, 255, 255)
+close.TextColor3 = Color3.new(1, 1, 1)
 close.TextSize = 18
 close.Font = Enum.Font.GothamBold
 close.Parent = main
@@ -62,19 +62,17 @@ closeCorner.CornerRadius = UDim.new(0, 8)
 closeCorner.Parent = close
 
 close.MouseButton1Click:Connect(function()
-    gui:Destroy()
+	keyGui:Destroy()
 end)
 
--- CHAMP DE KEY
 local keyBox = Instance.new("TextBox")
 keyBox.Size = UDim2.new(1, -40, 0, 45)
 keyBox.Position = UDim2.new(0, 20, 0, 65)
 keyBox.BackgroundColor3 = Color3.fromRGB(35, 35, 42)
 keyBox.BorderSizePixel = 0
 keyBox.PlaceholderText = "Enter your key..."
-keyBox.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
 keyBox.Text = ""
-keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyBox.TextColor3 = Color3.new(1, 1, 1)
 keyBox.TextSize = 16
 keyBox.Font = Enum.Font.Gotham
 keyBox.ClearTextOnFocus = false
@@ -84,13 +82,12 @@ local keyCorner = Instance.new("UICorner")
 keyCorner.CornerRadius = UDim.new(0, 8)
 keyCorner.Parent = keyBox
 
--- CHECK KEY
 local check = Instance.new("TextButton")
 check.Size = UDim2.new(0.48, -5, 0, 45)
 check.Position = UDim2.new(0, 20, 0, 125)
 check.BackgroundColor3 = Color3.fromRGB(60, 120, 255)
 check.Text = "Check Key"
-check.TextColor3 = Color3.fromRGB(255, 255, 255)
+check.TextColor3 = Color3.new(1, 1, 1)
 check.TextSize = 16
 check.Font = Enum.Font.GothamBold
 check.Parent = main
@@ -99,13 +96,12 @@ local checkCorner = Instance.new("UICorner")
 checkCorner.CornerRadius = UDim.new(0, 8)
 checkCorner.Parent = check
 
--- GET KEY
 local getKey = Instance.new("TextButton")
 getKey.Size = UDim2.new(0.48, -5, 0, 45)
 getKey.Position = UDim2.new(0.52, -15, 0, 125)
 getKey.BackgroundColor3 = Color3.fromRGB(45, 45, 52)
 getKey.Text = "Get Key"
-getKey.TextColor3 = Color3.fromRGB(255, 255, 255)
+getKey.TextColor3 = Color3.new(1, 1, 1)
 getKey.TextSize = 16
 getKey.Font = Enum.Font.GothamBold
 getKey.Parent = main
@@ -114,7 +110,6 @@ local getCorner = Instance.new("UICorner")
 getCorner.CornerRadius = UDim.new(0, 8)
 getCorner.Parent = getKey
 
--- MESSAGE
 local status = Instance.new("TextLabel")
 status.Size = UDim2.new(1, -40, 0, 30)
 status.Position = UDim2.new(0, 20, 0, 180)
@@ -125,39 +120,244 @@ status.TextSize = 14
 status.Font = Enum.Font.Gotham
 status.Parent = main
 
--- VERIFICATION
+--==================================================
+-- FLY PANEL
+--==================================================
+
+local function createFlyPanel()
+
+	local screenGui = Instance.new("ScreenGui")
+	screenGui.Name = "FlyPanel"
+	screenGui.ResetOnSpawn = false
+	screenGui.Parent = playerGui
+
+	local frame = Instance.new("Frame")
+	frame.Size = UDim2.new(0, 240, 0, 220)
+	frame.Position = UDim2.new(0.5, -120, 0.25, 0)
+	frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+	frame.BorderSizePixel = 0
+	frame.Active = true
+	frame.Draggable = true
+	frame.Parent = screenGui
+
+	local frameCorner = Instance.new("UICorner")
+	frameCorner.CornerRadius = UDim.new(0, 12)
+	frameCorner.Parent = frame
+
+	local title = Instance.new("TextLabel")
+	title.Size = UDim2.new(1, 0, 0, 40)
+	title.BackgroundTransparency = 1
+	title.Text = "🌈 Fly Panel"
+	title.TextColor3 = Color3.new(1, 1, 1)
+	title.Font = Enum.Font.GothamBold
+	title.TextScaled = true
+	title.Parent = frame
+
+	local flyButton = Instance.new("TextButton")
+	flyButton.Size = UDim2.new(0.8, 0, 0, 45)
+	flyButton.Position = UDim2.new(0.1, 0, 0.25, 0)
+	flyButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+	flyButton.Text = "FLY ON"
+	flyButton.TextColor3 = Color3.new(1, 1, 1)
+	flyButton.Font = Enum.Font.GothamBold
+	flyButton.TextScaled = true
+	flyButton.Parent = frame
+
+	local flyCorner = Instance.new("UICorner")
+	flyCorner.CornerRadius = UDim.new(0, 10)
+	flyCorner.Parent = flyButton
+
+	local jumpButton = Instance.new("TextButton")
+	jumpButton.Size = UDim2.new(0.8, 0, 0, 45)
+	jumpButton.Position = UDim2.new(0.1, 0, 0.50, 0)
+	jumpButton.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+	jumpButton.Text = "INFINITE JUMP ON"
+	jumpButton.TextColor3 = Color3.new(1, 1, 1)
+	jumpButton.Font = Enum.Font.GothamBold
+	jumpButton.TextScaled = true
+	jumpButton.Parent = frame
+
+	local jumpCorner = Instance.new("UICorner")
+	jumpCorner.CornerRadius = UDim.new(0, 10)
+	jumpCorner.Parent = jumpButton
+
+	local closeButton = Instance.new("TextButton")
+	closeButton.Size = UDim2.new(0.8, 0, 0, 35)
+	closeButton.Position = UDim2.new(0.1, 0, 0.76, 0)
+	closeButton.BackgroundColor3 = Color3.fromRGB(180, 40, 40)
+	closeButton.Text = "CLOSE"
+	closeButton.TextColor3 = Color3.new(1, 1, 1)
+	closeButton.Font = Enum.Font.GothamBold
+	closeButton.TextScaled = true
+	closeButton.Parent = frame
+
+	local closeCorner = Instance.new("UICorner")
+	closeCorner.CornerRadius = UDim.new(0, 10)
+	closeCorner.Parent = closeButton
+
+	--==================================================
+	-- FLY
+	--==================================================
+
+	local flying = false
+	local flyConnection
+
+	flyButton.MouseButton1Click:Connect(function()
+
+		flying = not flying
+
+		if flying then
+
+			flyButton.Text = "FLY OFF"
+			flyButton.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
+
+			flyConnection = RunService.RenderStepped:Connect(function()
+
+				local character = player.Character
+				if not character then return end
+
+				local humanoid = character:FindFirstChildOfClass("Humanoid")
+				local root = character:FindFirstChild("HumanoidRootPart")
+
+				if not humanoid or not root then return end
+
+				local camera = workspace.CurrentCamera
+				local direction = humanoid.MoveDirection
+
+				if direction.Magnitude > 0 then
+					root.AssemblyLinearVelocity =
+						direction * 50
+				else
+					root.AssemblyLinearVelocity = Vector3.zero
+				end
+
+				root.CFrame = CFrame.lookAt(
+					root.Position,
+					root.Position + camera.CFrame.LookVector
+				)
+			end)
+
+		else
+
+			flyButton.Text = "FLY ON"
+			flyButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+
+			if flyConnection then
+				flyConnection:Disconnect()
+				flyConnection = nil
+			end
+
+			local character = player.Character
+			local root = character and character:FindFirstChild("HumanoidRootPart")
+
+			if root then
+				root.AssemblyLinearVelocity = Vector3.zero
+			end
+		end
+	end)
+
+	--==================================================
+	-- INFINITE JUMP
+	--==================================================
+
+	local infiniteJump = false
+	local jumpConnection
+
+	jumpButton.MouseButton1Click:Connect(function()
+
+		infiniteJump = not infiniteJump
+
+		if infiniteJump then
+
+			jumpButton.Text = "INFINITE JUMP OFF"
+			jumpButton.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
+
+			jumpConnection = UserInputService.JumpRequest:Connect(function()
+
+				if not infiniteJump then return end
+
+				local character = player.Character
+				local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+
+				if humanoid then
+					humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+				end
+			end)
+
+		else
+
+			jumpButton.Text = "INFINITE JUMP ON"
+			jumpButton.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+
+			if jumpConnection then
+				jumpConnection:Disconnect()
+				jumpConnection = nil
+			end
+		end
+	end)
+
+	--==================================================
+	-- FERMER LE PANEL
+	--==================================================
+
+	closeButton.MouseButton1Click:Connect(function()
+
+		if flyConnection then
+			flyConnection:Disconnect()
+		end
+
+		if jumpConnection then
+			jumpConnection:Disconnect()
+		end
+
+		screenGui:Destroy()
+	end)
+end
+
+--==================================================
+-- VALIDATION DE LA KEY
+--==================================================
+
 check.MouseButton1Click:Connect(function()
 
-    if keyBox.Text == "" then
-        status.Text = "Please enter a key."
-        status.TextColor3 = Color3.fromRGB(255, 180, 80)
-        return
-    end
+	if keyBox.Text == "" then
 
-    if keyBox.Text == CORRECT_KEY then
+		status.Text = "Please enter a key."
+		status.TextColor3 = Color3.fromRGB(255, 180, 80)
 
-        status.Text = "Key accepted!"
-        status.TextColor3 = Color3.fromRGB(80, 255, 120)
+		return
+	end
 
-        task.wait(1)
-        gui:Destroy()
+	if keyBox.Text == CORRECT_KEY then
 
-    else
+		status.Text = "Key accepted!"
+		status.TextColor3 = Color3.fromRGB(80, 255, 120)
 
-        status.Text = "Invalid key."
-        status.TextColor3 = Color3.fromRGB(255, 80, 80)
+		task.wait(1)
 
-    end
+		-- Le Key System disparaît
+		keyGui:Destroy()
+
+		-- Le Fly Panel apparaît
+		createFlyPanel()
+
+	else
+
+		status.Text = "Invalid key."
+		status.TextColor3 = Color3.fromRGB(255, 80, 80)
+	end
 end)
 
--- LIEN DISCORD
+--==================================================
+-- GET KEY
+--==================================================
+
 getKey.MouseButton1Click:Connect(function()
 
-    status.Text = "Opening key link..."
-    status.TextColor3 = Color3.fromRGB(180, 180, 255)
+	keyBox.Text = DISCORD_LINK
+	keyBox:CaptureFocus()
+	keyBox.CursorPosition = #DISCORD_LINK + 1
 
-    pcall(function()
-        GuiService:OpenBrowserWindow(GET_KEY_URL)
-    end)
-
+	status.Text = "Discord link inserted."
+	status.TextColor3 = Color3.fromRGB(180, 180, 255)
 end)
