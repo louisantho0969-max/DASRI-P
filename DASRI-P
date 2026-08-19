@@ -1,1 +1,128 @@
-if game.CoreGui:FindFirstChild("BreakDoorSafeGui") then game.CoreGui.BreakDoorSafeGui:Destroy() end local ScreenGui,MainFrame,Title,ToggleInfJump,ToggleFly,ToggleNoclip,ToggleESP,SpeedButton,TpToHuman,Hint=Instance.new("ScreenGui"),Instance.new("Frame"),Instance.new("TextLabel"),Instance.new("TextButton"),Instance.new("TextButton"),Instance.new("TextButton"),Instance.new("TextButton"),Instance.new("TextButton"),Instance.new("TextButton"),Instance.new("TextLabel") ScreenGui.Name,ScreenGui.Parent,ScreenGui.ResetOnSpawn="BreakDoorSafeGui",game.CoreGui,false MainFrame.Name,MainFrame.Parent,MainFrame.BackgroundColor3,MainFrame.Position,MainFrame.Size,MainFrame.Active,MainFrame.Draggable="MainFrame",ScreenGui,Color3.fromRGB(25,25,25),UDim2.new(0.2,0,0.15,0),UDim2.new(0,240,0,320),true,true Title.Parent,Title.Size,Title.BackgroundColor3,Title.Text,Title.TextColor3,Title.TextSize,Title.Font=MainFrame,UDim2.new(1,0,0,35),Color3.fromRGB(15,15,15)," BreakDoor Safe | Anti-Crash v3",Color3.fromRGB(255,255,255),14,Enum.Font.SourceSansBold local function styleButton(b,t,p) b.Parent,b.Position,b.Size,b.BackgroundColor3,b.Text,b.TextColor3,b.TextSize,b.Font=MainFrame,p,UDim2.new(0.9,0,0,30),Color3.fromRGB(180,50,50),t,Color3.fromRGB(255,255,255),12,Enum.Font.SourceSansBold end styleButton(ToggleInfJump,"Бесконечный прыжок: ВЫКЛ",UDim2.new(0.05,0,0.13,0)) styleButton(ToggleFly,"Режим полета (Fly): ВЫКЛ",UDim2.new(0.05,0,0.24,0)) styleButton(ToggleNoclip,"Noclip (Сквозь стены): ВЫКЛ",UDim2.new(0.05,0,0.35,0)) styleButton(ToggleESP,"Безопасный ESP (ВХ): ВЫКЛ",UDim2.new(0.05,0,0.46,0)) styleButton(SpeedButton,"Множитель скорости: x1",UDim2.new(0.05,0,0.57,0)) styleButton(TpToHuman,"⚡ ТП к Выжившему (За паука)",UDim2.new(0.05,0,0.68,0)) ToggleFly.BackgroundColor3,TpToHuman.BackgroundColor3=Color3.fromRGB(40,100,180),Color3.fromRGB(100,40,120) Hint.Parent,Hint.Position,Hint.Size,Hint.BackgroundTransparency,Hint.Text,Hint.TextColor3,Hint.TextSize,Hint.Font=MainFrame,UDim2.new(0,0,0.85,0),UDim2.new(1,0,0,40),1,"Скрыть меню: кнопка [Right Shift]\nВсе детекты устранены",Color3.fromRGB(150,150,150),11,Enum.Font.SourceSansItalic local InfJumpActive,FlyActive,NoclipActive,ESPActive,SpeedValue,Player=false,false,false,false,1,game.Players.LocalPlayer ToggleInfJump.MouseButton1Click:Connect(function() InfJumpActive=not InfJumpActive ToggleInfJump.Text=InfJumpActive and "Бесконечный прыжок: ВКЛ" or "Бесконечный прыжок: ВЫКЛ" ToggleInfJump.BackgroundColor3=InfJumpActive and Color3.fromRGB(50,140,50) or Color3.fromRGB(180,50,50) end) task.spawn(function() local uis=game:GetService("UserInputService") while true do if InfJumpActive and Player.Character and Player.Character:FindFirstChildOfClass("Humanoid") then if uis:IsKeyDown(Enum.KeyCode.Space) then Player.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping") end end task.wait(0.05) end end) ToggleFly.MouseButton1Click:Connect(function() FlyActive=not FlyActive ToggleFly.Text=FlyActive and "Режим полета (Fly): ВКЛ" or "Режим полета (Fly): ВЫКЛ" ToggleFly.BackgroundColor3=FlyActive and Color3.fromRGB(50,140,50) or Color3.fromRGB(40,100,180) local c=Player.Character if not c or not c:FindFirstChild("HumanoidRootPart") then return end if FlyActive then task.spawn(function() local uis=game:GetService("UserInputService") local cam=workspace.CurrentCamera local hrp=c.HumanoidRootPart hrp.AssemblyLinearVelocity=Vector3.new(0,0,0) hrp.AssemblyAngularVelocity=Vector3.new(0,0,0) while FlyActive and c and hrp and hrp.Parent do local dir=Vector3.new(0,0,0) if uis:IsKeyDown(Enum.KeyCode.W) then dir=dir+cam.CFrame.LookVector end if uis:IsKeyDown(Enum.KeyCode.S) then dir=dir-cam.CFrame.LookVector end if uis:IsKeyDown(Enum.KeyCode.A) then dir=dir-cam.CFrame.RightVector end if uis:IsKeyDown(Enum.KeyCode.D) then dir=dir+cam.CFrame.RightVector end if uis:IsKeyDown(Enum.KeyCode.Space) then dir=dir+Vector3.new(0,1,0) end if uis:IsKeyDown(Enum.KeyCode.LeftControl) then dir=dir-Vector3.new(0,1,0) end local speed=2.5*SpeedValue if dir.Magnitude>0 then hrp.CFrame=hrp.CFrame+dir.Unit*speed else hrp.AssemblyLinearVelocity=Vector3.new(0,0,0) hrp.AssemblyAngularVelocity=Vector3.new(0,0,0) end task.wait(0.01) end end) end end) ToggleNoclip.MouseButton1Click:Connect(function() NoclipActive=not NoclipActive ToggleNoclip.Text=NoclipActive and "Noclip: ВКЛ" or "Noclip: ВЫКЛ" ToggleNoclip.BackgroundColor3=NoclipActive and Color3.fromRGB(50,140,50) or Color3.fromRGB(180,50,50) end) game:GetService("RunService").Stepped:Connect(function() if NoclipActive and Player.Character then for _,p in pairs(Player.Character:GetDescendants()) do if p:IsA("BasePart") then p.CanCollide=false end end end end) SpeedButton.MouseButton1Click:Connect(function() SpeedValue=SpeedValue+1 if SpeedValue>10 then SpeedValue=1 end SpeedButton.Text="Множитель скорости: x"..tostring(SpeedValue) if Player.Character and Player.Character:FindFirstChild("Humanoid") then Player.Character.Humanoid.WalkSpeed=16+(SpeedValue-1)*10 end end) Player.CharacterAdded:Connect(function(c) local h=c:WaitForChild("Humanoid") task.wait(0.5) h.WalkSpeed=16+(SpeedValue-1)*10 end) local function applySafeESP(c,n,cl) if c:FindFirstChild("SafeEspTag") then return end local b,t=Instance.new("BillboardGui"),Instance.new("TextLabel") b.Name,b.AlwaysOnTop,b.Size,b.StudsOffset,b.Parent="SafeEspTag",true,UDim2.new(0,100,0,30),Vector3.new(0,3,0),c t.Size,t.BackgroundTransparency,t.Text,t.TextColor3,t.TextSize,t.Font,t.Parent=UDim2.new(1,0,1,0),1,n,cl,12,Enum.Font.SourceSansBold,b end ToggleESP.MouseButton1Click:Connect(function() ESPActive=not ESPActive ToggleESP.Text=ESPActive and "Безопасный ESP (ВХ): ВКЛ" or "Безопасный ESP (ВХ): ВЫКЛ" ToggleESP.BackgroundColor3=ESPActive and Color3.fromRGB(50,140,50) or Color3.fromRGB(180,50,50) if ESPActive then task.spawn(function() while ESPActive do for _,p in pairs(game.Players:GetPlayers()) do if p~=Player and p.Character then applySafeESP(p.Character,"[ИГРОК] "..p.Name,Color3.fromRGB(0,255,100)) end end for _,m in pairs(workspace:GetChildren()) do if m:FindFirstChild("Humanoid") and not game.Players:GetPlayerFromCharacter(m) then applySafeESP(m,"[ПАУК-ОХОТНИК]",Color3.fromRGB(255,50,50)) end end task.wait(4) end end) else for _,v in pairs(workspace:GetDescendants()) do if v.Name=="SafeEspTag" then v:Destroy() end end end end) TpToHuman.MouseButton1Click:Connect(function() local t={} for _,p in pairs(game.Players:GetPlayers()) do if p~=Player and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then table.insert(t,p.Character.HumanoidRootPart) end end if #t>0 and Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then Player.Character.HumanoidRootPart.CFrame=t[math.random(1,#t)].CFrame*CFrame.new(0,0,3) end end) game:GetService("UserInputService").InputBegan:Connect(function(i,g) if not g and i.KeyCode==Enum.KeyCode.RightShift then MainFrame.Visible=not MainFrame.Visible end end)
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- =========================
+-- CONFIGURATION
+-- =========================
+
+local KEY_CORRECTE = "MAKEY123"
+local LIEN_DISCORD = "https://discord.gg/A3K👹"
+
+-- =========================
+-- INTERFACE
+-- =========================
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "KeySystem"
+gui.ResetOnSpawn = false
+gui.Parent = player:WaitForChild("PlayerGui")
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 350, 0, 220)
+frame.Position = UDim2.new(0.5, -175, 0.5, -110)
+frame.Parent = gui
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 12)
+corner.Parent = frame
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, -20, 0, 40)
+title.Position = UDim2.new(0, 10, 0, 10)
+title.BackgroundTransparency = 1
+title.Text = "Système de Key"
+title.TextScaled = true
+title.Parent = frame
+
+local keyBox = Instance.new("TextBox")
+keyBox.Size = UDim2.new(1, -40, 0, 45)
+keyBox.Position = UDim2.new(0, 20, 0, 60)
+keyBox.PlaceholderText = "Entre ta Key ici..."
+keyBox.Text = ""
+keyBox.ClearTextOnFocus = false
+keyBox.Parent = frame
+
+local continueButton = Instance.new("TextButton")
+continueButton.Size = UDim2.new(0.45, -10, 0, 45)
+continueButton.Position = UDim2.new(0.05, 0, 0, 125)
+continueButton.Text = "Continuer"
+continueButton.Parent = frame
+
+local getKeyButton = Instance.new("TextButton")
+getKeyButton.Size = UDim2.new(0.45, -10, 0, 45)
+getKeyButton.Position = UDim2.new(0.5, 10, 0, 125)
+getKeyButton.Text = "Get Key"
+getKeyButton.Parent = frame
+
+local message = Instance.new("TextLabel")
+message.Size = UDim2.new(1, -20, 0, 30)
+message.Position = UDim2.new(0, 10, 1, -35)
+message.BackgroundTransparency = 1
+message.Text = ""
+message.TextScaled = true
+message.Parent = frame
+
+-- =========================
+-- BOUTON CONTINUER
+-- =========================
+
+continueButton.MouseButton1Click:Connect(function()
+
+	if keyBox.Text == KEY_CORRECTE then
+
+		message.Text = "Key correcte !"
+
+		task.wait(0.5)
+
+		gui:Destroy()
+
+		-- ==================================
+		----[[
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠛⠛⠛⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠿⣿⣿⣿⡿⠋⣠⣶⣿⣿⣿⣷⣄⠙⢿⣿⣿⣿⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠈⠿⡿⠁⣀⣄⡉⠻⣿⣿⠟⠉⢀⣉⠻⠟⠁⠀⣨⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⡄⠀⠀⢀⠀⣀ ⢀⡃⠀⠀⢀ ⠱⢠⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⢠⣶⣤⡤⠤⢶⣿⣿⣦⣤⣄⣤⣮⠈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀⠘⠛⠋⣀⣀⠈⠛⢛⣋⣩⣌⠻⠿⠆⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠿⠠⣄⡙⠿⢿⣿⣿⣿⣿⠿⢷⣄⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠃⢀⣶⢸⣿⣿⣤⣤⣤⣴⣶⣶⣿⣿⣿⣆⡘⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠁⢠⣿⡙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣼⣿⣷⣮⣕⣈⣛⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠁⠀⠀⠀⠙⠃⣤⡙⠛⠻⢿⣿⣿⣿⣿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣮⣟⢿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⣿⣿⣿⡿⠟⣋⣍⣩⣤⣄⠀⢀⣤⣶⣶⣄⣈⠙⠂⣀⣀⣭⣥⣴⣶⣾⢡⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⡙⣿⣿⣿⣿
+⣿⣿⣿⣿⣿⡿⠁⣤⣾⣿⣿⣿⣿⣿⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣛⣭⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡜⣿⣿⣿
+⣿⣿⣿⣿⠏⢀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠮⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⢸⣿⣿
+⣿⣿⣿⠏⠀⠾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠘⢻⣿⣿⣿⣿⣿⣿⡌⢿⣿
+⣿⣿⣿⠀⢁⡀⠿⡿⠿⠙⠁⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢏⠔⠀⢀⣣⣄⣉⣿⣿⣿⣿⣿⡌⣿
+⣿⣿⡿⠀⠘⢁⠀⠀⠀⠀⠀⢈⠉⠛⢿⣿⣿⣿⣿⣿⣿⣿⡿⢋⡀⠀⠘⣿⢿⣿⡿⠿⠿⡭⠛⠉⠀⠀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⢸
+⣿⣿⢁⣾⣦⠀⢷⣶⣦⠀⠀⠈⠓⢤⡀⠉⠉⠋⠉⠉⠉⠛⠛⣛⣁⠀⠀⠀⢀⣀⠀⣀⡀⠀⠀⠀⠀⠘⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢸
+⣿⠇⣼⣿⣿⡇⣼⣿⣿⡇⠀⠀⠀⠀⠀⠀⠈⠁⠀⠀⣠⢶⣿⣿⣿⣷⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢸
+⣿⠀⣿⣿⡿⢰⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⣀⣀⣤⣤⣶⣾⣿⣿⣿⣿⣿⣶⣟⣀⣠⣄⣠⣴⣶⡀⠀⠙⢿⡏⢿⣿⣿⣿⣿⣿⣿⣾
+⡿⠀⢹⡿⢁⣿⣿⣿⣿⠁⣰⡀⠀⠀⠀⠐⠦⡈⢻⣿⣿⣿⣿⣿⡇⢻⣿⣿⣿⣿⣿⣿⣿⣿⡿⠛⠀⠄⡀⠈⠿⠈⠻⣿⣿⣿⣿⡇⣿
+⡇⣼⣟⠃⣼⣿⣿⠟⠁⢠⣿⣷⡀⠀⢀⣀⠀⠀⢀⣀⣀⣀⣈⠻⣷⣀⣤⣄⣉⡉⠻⠿⠿⢟⣷⡤⢀⣼⣷⡀⠀⠀⢀⣿⣿⣿⣿⣿⢿
+⣠⣿⣿⡄⠉⠉⠁⠀⢠⣾⣿⣿⡇⠀⡺⣿⣷⠀⢸⣿⣿⣿⣿⣿⠈⣽⣿⣿⣿⣿⣯⣴⣶⣶⣿⡇⣾⣿⣿⣿⡄⠀⣤⣿⣿⣿⣿⡿⣸
+⣿⣿⣿⣿⣆⠀⠀⣴⣿⣿⣿⣿⡇⠘⣿⣏⢿⡇⠈⠛⠛⢻⣿⣿⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⡿⢹⣿⣿⣿⣿⢁⣿⣿⣿⣿⣿⣿⡃⢸
+⣿⣿⣿⣿⣿⣦⡄⣻⣿⣿⣿⣿⠀⣶⣿⣿⣷⣬⡐⢶⣶⣶⡎⠉⣰⣦⣤⣥⣾⣿⣿⣿⣿⣿⠃⣸⣿⣿⣿⡿⢸⣿⣿⣿⣿⣿⣿⣿⢸
+⣿⣿⣿⣿⣿⣿⣄⣻⣿⣿⣿⡿⠀⣿⡟⢻⣿⣿⣿⠾⣾⢿⣿⡟⣿⣿⣿⣿⣿⣿⣿⣿⡿⠯⢠⣿⣿⣿⣿⡇⢸⣿⣿⣿⣿⣿⣿⡟⢸
+Do not skid bro, that is not cool:)
+]]
+
+-- discord.gg/DtzyxnnH6k
+-- Nexus Obfuscator [Blossom Release] 1.0
+return(function(...)local fU1={{"K7,--l5V","K4$%Qf","K*pAc23M6r>2p0","K)J,7E5gU#}86%S@+d)tl4j}V","K*pAc/6eM7!2qb_]83<NX2+DR}2-1$[6D0","K87pg_","K853Po3A","jZXJyb3I=","jUHJvdGVjdGVkIGJ5IE5leHVz","jc3RyaW5n","jcGFpcnM=","K(M]Mj2+VKc","K_h{Jb3M6g","K)J,7E5e~pOA~6`","K-A6Xk(M]Dh83kZj9[j9s","jVG91Y2hFbmFibGVk","jbW9iaWxl","K7,(","jU3RhcnRlckd1aQ==","K+d)hP_@a%f3maZY86%S@","jSEVYQUdPTg==","K5h-Yl8:;9_6C]","K=}J@Q6e{]_,)","jaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL254dmFwL18vbC9zcmMvZm9yemE=","K4JL1(8^jr<7ZZ?74%;B|8WeD*3M6_`6DDA<8=p{36}ecH9[^051L1$D8;ja62D","K854&,","jWyBCcm9va2hhdmVuIF0gTG9hZGluZyBBc3NldHMuLg==","K0)AoY4l,{>8}]k<0o;fS2_Q}h4<)DV8}DA*?gLZ","K4JL1(8^jr<7ZZ?74%;B|8WeD*3M6_`6DDA<8=p{36}ecH9[^051L1$D8;ja68Y["}}local function u7nT(y0)local zP,Xi=math.floor((y0+53279-1)/200)+1,((y0+53279-1)%200)+1 return fU1[zP][Xi]end local Qpn={o=79,p=80,["~"]=1,["("]=23,["]"]=5,y=89,z=90,["&"]=21,["."]=11,["7"]=36,["4"]=33,["#"]=18,E=43,["-"]=27,["+"]=26,P=54,I=47,["^"]=2,k=75,[";"]=8,["5"]=34,w=87,A=39,["`"]=0,e=69,[":"]=9,["["]=4,d=68,v=86,V=60,l=76,F=44,n=78,Q=55,W=61,C=41,J=48,L=50,["="]=28,q=81,["|"]=3,["{"]=6,Z=64,i=73,["9"]=38,Y=63,s=83,["8"]=37,u=85,["@"]=17,x=88,U=59,j=74,[","]=10,t=84,X=62,["$"]=19,M=51,["3"]=32,["1"]=30,["2"]=31,[")"]=24,B=40,h=72,D=42,["}"]=7,["6"]=35,K=49,m=77,[">"]=13,R=56,_=25,H=46,f=70,G=45,["/"]=15,["0"]=29,["<"]=12,["%"]=20,g=71,T=58,a=65,["?"]=14,S=57,r=82,b=66,N=52,c=67,["!"]=16,O=53,["*"]=22}local DBW={h=33,W=22,["3"]=55,["1"]=53,q=42,["9"]=61,N=13,X=23,k=36,m=38,t=45,L=11,A=0,E=4,["2"]=54,V=21,s=44,i=34,M=12,r=43,e=30,a=26,v=47,J=9,T=19,Z=25,d=29,["+"]=62,l=37,["8"]=60,K=10,z=51,o=40,F=5,G=6,P=15,w=48,j=35,u=46,["6"]=58,D=3,c=28,x=49,p=41,g=32,["/"]=63,["5"]=57,U=20,I=8,["4"]=56,n=39,H=7,y=50,b=27,["0"]=52,C=2,f=31,["7"]=59,S=18,O=14,B=1,Y=24,Q=16,R=17}local T,F,e,R,C,X,N,a=type,string.len,fU1,string.char,table.concat,math.floor,string.sub,table.insert for _,tbl in ipairs(fU1) do e=tbl for Z=1,#e,1 do local r=e[Z]if T(r)=="string"then local T=N(r,1,1)if T=="j"then r=N(r,2)local T,w,V,D,g=F(r),{},1,0,0 while V<=T do local F=N(r,V,V)local e=DBW[F]if e then D=D+e*(64^((3-g)))g=g+1 if g==4 then g=0 local T,F,e=X(D/65536),X((D%65536)/256),D%256 a(w,R(T,F,e))D=0 end elseif F=="="then a(w,R(X(D/65536)))if V>=T or N(r,V+1,V+1)~="="then a(w,R(X((D%65536)/256)))end break end V=V+1 end e[Z]=C(w)elseif T=="K"then r=N(r,2)local T,j,V=F(r),{},1 while V<=T do local F=(T-V)+1 local e=F>=5 and 5 or F local C,Z=0,e>1 for T=0,4,1 do local F if T<e then local e=N(r,V+T,V+T)F=Qpn[e]if not F then Z=false break end else F=84 end C=C*85+F end if Z then local T,w,F,Zv=X(C/16777216)%256,X(C/65536)%256,X(C/256)%256,C%256 if e==5 then a(j,R(T,w,F,Zv))elseif e==4 then a(j,R(T,w,F))elseif e==3 then a(j,R(T,w))elseif e==2 then a(j,R(T))end end V=V+e end e[Z]=C(j)end end end end for H,s in ipairs({{1,4},{5,8},{9,12},{13,16},{17,20},{21,24},{25,28},{29,29}})do local tbl=fU1[1] while s[1]<s[2]do tbl[s[1]],tbl[s[2]],s[1],s[2]=tbl[s[2]],tbl[s[1]],s[1]+1,s[2]-1 end end  return(function(aa,bb,cc,dd,ee,ff,gg,hh,ii,jj,kk,ll,mm,nn,oo)hh,oo,kk,jj,nn,ii,gg,mm,ll={},function(oo,pp,bb,dd)local kk,ii,jj,nn,ll,cc,hh,qq,mm,gg while oo do vanilla= ee[u7nT(-53275)](function()a= ee[u7nT(-53276)][u7nT(-53277)](ee[u7nT(-53276)], u7nT(-53278))b= a[u7nT(-53271)](a)d= a.RobloxLocaleId e= a.SystemLocaleId if ee[u7nT(-53272)](b)~= u7nT(-53273) then ee[u7nT(-53274)](u7nT(-53267),(0xBC2%376))end if #b == 0 then ee[u7nT(-53274)](u7nT(-53267),(0x1BE6%476))end if ee[u7nT(-53272)](d)~= u7nT(-53268) then ee[u7nT(-53274)](u7nT(-53267),(0x1346%274))end if ee[u7nT(-53272)](e)~= u7nT(-53268) then ee[u7nT(-53274)](u7nT(-53267),(0x57E%108))end if d == "" then ee[u7nT(-53274)](u7nT(-53267),(0x525E%1004))end if e == "" then ee[u7nT(-53274)](u7nT(-53267),(0x278C%723))end f= not (1==1) for _,g in ee[u7nT(-53269)](b)do if typeof(g)== u7nT(-53270) then f = not (1~=1) break end end if not f then ee[u7nT(-53274)](u7nT(-53267),(0x34A2%842))end end)if not vanilla then ee[u7nT(-53274)](u7nT(-53267),(0x795%277))end P= ee[u7nT(-53276)][u7nT(-53277)](ee[u7nT(-53276)], u7nT(-53263))[u7nT(-53264)] if not P then ee[u7nT(-53274)](u7nT(-53267),(0x45FF%943))end plat= ee[u7nT(-53276)][u7nT(-53277)](ee[u7nT(-53276)], u7nT(-53265))[u7nT(-53266)] and u7nT(-53259) or u7nT(-53260) function n(m)ee[u7nT(-53276)][u7nT(-53277)](ee[u7nT(-53276)], u7nT(-53261)):SetCore(u7nT(-53262),{Title = u7nT(-53255),Text = m,Duration = (0x186%125)})end function load(url)if not url then return end ok,res= ee[u7nT(-53275)](ee[u7nT(-53276)].HttpGet,ee[u7nT(-53276)],url)if ok and res then fn= ee[u7nT(-53256)](res)if fn then fn()end end end n(u7nT(-53257)..P.Name)g={[4924922222]={pc = u7nT(-53258),mobile = u7nT(-53251)}}target= g[ee[u7nT(-53276)].PlaceId]url= ee[u7nT(-53272)](target)== u7nT(-53273) and(target[plat]or target.pc)ee[u7nT(-53252)].spawn(function()if url then n(u7nT(-53253))load(url)else n(u7nT(-53254))load(u7nT(-53250))end end) oo=not (1==1) end return nil end,function(ee)hh[ee]=hh[ee]-1 if hh[ee]==0 then hh[ee],ii[ee]=nil,nil end end,function()nn=nn+1 hh[nn]=1 return nn end,0,{},function(ee)for oo=1,#ee do hh[ee[oo]]=hh[ee[oo]]+1 end return bb({},{__index=ee})end,function(ee,ff)local rr=gg(ff)return function(...)return oo(ee,{...},ff,rr)end end return mm(1,{})()end)(select,setmetatable,{...},getmetatable,getfenv and getfenv() or _ENV,unpack or table.unpack)end)(...)
+		-- ==================================
+
+	else
+
+		message.Text = "Key invalide !"
+
+	end
+
+end)
+
+-- =========================
+-- BOUTON GET KEY
+-- =========================
+
+getKeyButton.MouseButton1Click:Connect(function()
+
+	message.Text = "https://discord.gg/A3K👹" .. LIEN_DISCORD
