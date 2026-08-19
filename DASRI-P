@@ -1,135 +1,29 @@
---// A3K 👹 PANEL
-
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
---// État
-local A3K_Enabled = false
-
---// ==========================================
---// 👹 TON SCRIPT A3K À METTRE ICI
---// ==========================================
-
-local function A3K()
-
-loadstring(game:HttpGet("https://raw.githubusercontent.com/nxvap/Hexagon/refs/heads/main/brookhaven"))()
-
-
-end
-
---// ==========================================
---// FIN DU SCRIPT A3K
---// ==========================================
-
-
---// Création du GUI
 local gui = Instance.new("ScreenGui")
 gui.Name = "A3K👹"
 gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
 
---// Panel
-local panel = Instance.new("Frame")
-panel.Size = UDim2.new(0, 220, 0, 130)
-panel.Position = UDim2.new(0.5, -110, 0.5, -65)
-panel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-panel.BorderSizePixel = 0
-panel.Parent = gui
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 350, 0, 180)
+frame.Position = UDim2.new(0.5, -175, 0.5, -90)
+frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+frame.BorderSizePixel = 0
+frame.Parent = gui
 
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 12)
-corner.Parent = panel
-
---// Titre
 local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, 0, 0, 45)
+title.Size = UDim2.new(1, 0, 1, 0)
 title.BackgroundTransparency = 1
 title.Text = "A3K👹"
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.TextSize = 25
+title.TextScaled = true
 title.Font = Enum.Font.GothamBold
-title.Parent = panel
+title.Parent = frame
 
---// Bouton ON/OFF
-local button = Instance.new("TextButton")
-button.Size = UDim2.new(0, 180, 0, 50)
-button.Position = UDim2.new(0.5, -90, 0, 60)
-button.BackgroundColor3 = Color3.fromRGB(180, 40, 40)
-button.Text = "A3K : OFF"
-button.TextColor3 = Color3.fromRGB(255, 255, 255)
-button.TextSize = 18
-button.Font = Enum.Font.GothamBold
-button.BorderSizePixel = 0
-button.Parent = panel
+task.wait(4)
 
-local buttonCorner = Instance.new("UICorner")
-buttonCorner.CornerRadius = UDim.new(0, 10)
-buttonCorner.Parent = button
+gui:Destroy()
 
---// Bouton
-button.MouseButton1Click:Connect(function()
-
-    A3K_Enabled = not A3K_Enabled
-
-    if A3K_Enabled then
-
-        button.Text = "A3K : ON"
-        button.BackgroundColor3 = Color3.fromRGB(40, 180, 80)
-
-        -- Lance ton code
-        A3K()
-
-    else
-
-        button.Text = "A3K : OFF"
-        button.BackgroundColor3 = Color3.fromRGB(180, 40, 40)
-
-    end
-
-end)
-
---// Panel déplaçable
-local UserInputService = game:GetService("UserInputService")
-
-local dragging = false
-local dragStart
-local startPos
-
-title.InputBegan:Connect(function(input)
-
-    if input.UserInputType == Enum.UserInputType.MouseButton1
-    or input.UserInputType == Enum.UserInputType.Touch then
-
-        dragging = true
-        dragStart = input.Position
-        startPos = panel.Position
-
-    end
-
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-
-    if dragging and
-       (input.UserInputType == Enum.UserInputType.MouseMovement
-       or input.UserInputType == Enum.UserInputType.Touch) then
-
-        local delta = input.Position - dragStart
-
-        panel.Position = UDim2.new(
-            startPos.X.Scale,
-            startPos.X.Offset + delta.X,
-            startPos.Y.Scale,
-            startPos.Y.Offset + delta.Y
-        )
-
-    end
-
-end)
-
-UserInputService.InputEnded:Connect(function(input)
-
-    if input.UserInputType == Enum.UserInputType.MouseButton1
-    or input.UserInputType == Enum.UserInputType.Touch then
-
-        dragging = false
+loadstring(game:HttpGet("https://raw.githubusercontent.com/as6cd0/SP_Hub/refs/heads/main/Brookhaven"))()
