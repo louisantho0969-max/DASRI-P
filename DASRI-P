@@ -1,21 +1,17 @@
--- KEY SYSTEM + TON SCRIPT
-
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
-local CORRECT_KEY = "5377-HACK"
+local KEY = "5377-HACK"
+local DISCORD_LINK = "https://discord.gg/vxd3pA97n"
 
--- =========================
--- CRÉATION DE LA FENÊTRE
--- =========================
-
+-- Fenêtre Key
 local gui = Instance.new("ScreenGui")
 gui.Name = "KeySystem"
 gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
 
 local frame = Instance.new("Frame")
-frame.Size = UDim2.fromOffset(330, 200)
+frame.Size = UDim2.fromOffset(350, 210)
 frame.Position = UDim2.fromScale(0.5, 0.5)
 frame.AnchorPoint = Vector2.new(0.5, 0.5)
 frame.Parent = gui
@@ -29,73 +25,59 @@ title.Parent = frame
 local keyBox = Instance.new("TextBox")
 keyBox.Size = UDim2.new(1, -30, 0, 40)
 keyBox.Position = UDim2.fromOffset(15, 55)
-keyBox.PlaceholderText = "Enter Key"
+keyBox.PlaceholderText = "Enter your key"
 keyBox.ClearTextOnFocus = false
 keyBox.Parent = frame
 
-local enterButton = Instance.new("TextButton")
-enterButton.Size = UDim2.fromOffset(140, 40)
-enterButton.Position = UDim2.fromOffset(15, 110)
-enterButton.Text = "ENTER"
-enterButton.Parent = frame
+local enter = Instance.new("TextButton")
+enter.Size = UDim2.fromOffset(150, 40)
+enter.Position = UDim2.fromOffset(15, 105)
+enter.Text = "ENTER"
+enter.Parent = frame
 
-local getKeyButton = Instance.new("TextButton")
-getKeyButton.Size = UDim2.fromOffset(140, 40)
-getKeyButton.Position = UDim2.fromOffset(175, 110)
-getKeyButton.Text = "GET KEY"
-getKeyButton.Parent = frame
+local getKey = Instance.new("TextButton")
+getKey.Size = UDim2.fromOffset(150, 40)
+getKey.Position = UDim2.fromOffset(185, 105)
+getKey.Text = "GET KEY"
+getKey.Parent = frame
 
-local closeButton = Instance.new("TextButton")
-closeButton.Size = UDim2.new(1, -30, 0, 30)
-closeButton.Position = UDim2.fromOffset(15, 155)
-closeButton.Text = "CLOSE"
-closeButton.Parent = frame
+local close = Instance.new("TextButton")
+close.Size = UDim2.new(1, -30, 0, 35)
+close.Position = UDim2.fromOffset(15, 155)
+close.Text = "CLOSE"
+close.Parent = frame
 
-local message = Instance.new("TextLabel")
-message.Size = UDim2.new(1, -30, 0, 25)
-message.Position = UDim2.fromOffset(15, 180)
-message.Text = ""
-message.Parent = frame
-
--- =========================
 -- GET KEY
--- =========================
-
-getKeyButton.MouseButton1Click:Connect(function()
-    -- Ajoute ici le système de récupération
-    -- de clé de TON jeu.
-    message.Text = "Va chercher ta clé."
+getKey.MouseButton1Click:Connect(function()
+    keyBox.Text = DISCORD_LINK
+    keyBox:CaptureFocus()
 end)
 
--- =========================
 -- CLOSE
--- =========================
-
-closeButton.MouseButton1Click:Connect(function()
+close.MouseButton1Click:Connect(function()
     gui:Destroy()
 end)
 
--- =========================
--- VÉRIFICATION
--- =========================
+-- ENTER
+enter.MouseButton1Click:Connect(function()
 
-enterButton.MouseButton1Click:Connect(function()
-
-    if keyBox.Text == CORRECT_KEY then
+    if keyBox.Text == KEY then
 
         gui:Destroy()
 
-        -- =========================
-        -- TON SYSTÈME COMMENCE ICI
-        -- =========================
+        -- =====================================
+        -- DEUXIÈME SYSTÈME
+        -- =====================================
 
-        print("Clé correcte !")
+        -- Le code de ton deuxième système
+        -- doit être placé ici.
 
-        -- Mets ici le code de ton propre système.
+        print("Système principal ouvert !")
 
     else
 
-        message.Text = "Clé incorrecte."
+        keyBox.Text = ""
+        keyBox.PlaceholderText = "Key incorrecte !"
 
     end
 end)
