@@ -125,10 +125,7 @@ status.TextSize = 14
 status.Font = Enum.Font.Gotham
 status.Parent = main
 
---========================
 -- VERIFICATION
---========================
-
 check.MouseButton1Click:Connect(function()
 
     if keyBox.Text == "" then
@@ -145,25 +142,15 @@ check.MouseButton1Click:Connect(function()
         task.wait(1)
         gui:Destroy()
 
-        --========================================
-        -- CODE À EXÉCUTER APRÈS LA KEY
-        --========================================
-
-        print("Key validée !")
-
-
     else
 
-        status.Text = "A3K ON!👹"
+        status.Text = "Invalid key."
         status.TextColor3 = Color3.fromRGB(255, 80, 80)
 
     end
 end)
 
---========================
 -- LIEN DISCORD
---========================
-
 getKey.MouseButton1Click:Connect(function()
 
     status.Text = "Opening key link..."
