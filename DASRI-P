@@ -1,83 +1,176 @@
+--// KEY SYSTEM - TON PROPRE JEU ROBLOX
+
 local Players = game:GetService("Players")
+local GuiService = game:GetService("GuiService")
+
 local player = Players.LocalPlayer
 
-local KEY = "5377-HACK"
-local DISCORD_LINK = "https://discord.gg/vxd3pA97n"
+--========================
+-- CONFIGURATION
+--========================
 
--- Fenêtre Key
+local CORRECT_KEY = "5377-HACK"
+local GET_KEY_URL = "https://discord.gg/A3K"
+
+--========================
+-- GUI
+--========================
+
 local gui = Instance.new("ScreenGui")
 gui.Name = "KeySystem"
 gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
 gui.Parent = player:WaitForChild("PlayerGui")
 
-local frame = Instance.new("Frame")
-frame.Size = UDim2.fromOffset(350, 210)
-frame.Position = UDim2.fromScale(0.5, 0.5)
-frame.AnchorPoint = Vector2.new(0.5, 0.5)
-frame.Parent = gui
+local main = Instance.new("Frame")
+main.Name = "Main"
+main.Size = UDim2.new(0, 400, 0, 230)
+main.Position = UDim2.new(0.5, -200, 0.5, -115)
+main.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+main.BorderSizePixel = 0
+main.Parent = gui
 
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 12)
+corner.Parent = main
+
+-- TITRE
 local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, 0, 0, 45)
+title.Size = UDim2.new(1, -50, 0, 45)
+title.Position = UDim2.new(0, 15, 0, 5)
+title.BackgroundTransparency = 1
 title.Text = "KEY SYSTEM"
-title.TextScaled = true
-title.Parent = frame
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextSize = 24
+title.Font = Enum.Font.GothamBold
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Parent = main
 
-local keyBox = Instance.new("TextBox")
-keyBox.Size = UDim2.new(1, -30, 0, 40)
-keyBox.Position = UDim2.fromOffset(15, 55)
-keyBox.PlaceholderText = "Enter your key"
-keyBox.ClearTextOnFocus = false
-keyBox.Parent = frame
-
-local enter = Instance.new("TextButton")
-enter.Size = UDim2.fromOffset(150, 40)
-enter.Position = UDim2.fromOffset(15, 105)
-enter.Text = "ENTER"
-enter.Parent = frame
-
-local getKey = Instance.new("TextButton")
-getKey.Size = UDim2.fromOffset(150, 40)
-getKey.Position = UDim2.fromOffset(185, 105)
-getKey.Text = "GET KEY"
-getKey.Parent = frame
-
+-- FERMER
 local close = Instance.new("TextButton")
-close.Size = UDim2.new(1, -30, 0, 35)
-close.Position = UDim2.fromOffset(15, 155)
-close.Text = "CLOSE"
-close.Parent = frame
+close.Size = UDim2.new(0, 35, 0, 35)
+close.Position = UDim2.new(1, -43, 0, 10)
+close.BackgroundColor3 = Color3.fromRGB(45, 45, 50)
+close.Text = "X"
+close.TextColor3 = Color3.fromRGB(255, 255, 255)
+close.TextSize = 18
+close.Font = Enum.Font.GothamBold
+close.Parent = main
 
--- GET KEY
-getKey.MouseButton1Click:Connect(function()
-    keyBox.Text = DISCORD_LINK
-    keyBox:CaptureFocus()
-end)
+local closeCorner = Instance.new("UICorner")
+closeCorner.CornerRadius = UDim.new(0, 8)
+closeCorner.Parent = close
 
--- CLOSE
 close.MouseButton1Click:Connect(function()
     gui:Destroy()
 end)
 
--- ENTER
-enter.MouseButton1Click:Connect(function()
+-- CHAMP DE KEY
+local keyBox = Instance.new("TextBox")
+keyBox.Size = UDim2.new(1, -40, 0, 45)
+keyBox.Position = UDim2.new(0, 20, 0, 65)
+keyBox.BackgroundColor3 = Color3.fromRGB(35, 35, 42)
+keyBox.BorderSizePixel = 0
+keyBox.PlaceholderText = "Enter your key..."
+keyBox.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
+keyBox.Text = ""
+keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyBox.TextSize = 16
+keyBox.Font = Enum.Font.Gotham
+keyBox.ClearTextOnFocus = false
+keyBox.Parent = main
 
-    if keyBox.Text == KEY then
+local keyCorner = Instance.new("UICorner")
+keyCorner.CornerRadius = UDim.new(0, 8)
+keyCorner.Parent = keyBox
 
+-- CHECK KEY
+local check = Instance.new("TextButton")
+check.Size = UDim2.new(0.48, -5, 0, 45)
+check.Position = UDim2.new(0, 20, 0, 125)
+check.BackgroundColor3 = Color3.fromRGB(60, 120, 255)
+check.Text = "Check Key"
+check.TextColor3 = Color3.fromRGB(255, 255, 255)
+check.TextSize = 16
+check.Font = Enum.Font.GothamBold
+check.Parent = main
+
+local checkCorner = Instance.new("UICorner")
+checkCorner.CornerRadius = UDim.new(0, 8)
+checkCorner.Parent = check
+
+-- GET KEY
+local getKey = Instance.new("TextButton")
+getKey.Size = UDim2.new(0.48, -5, 0, 45)
+getKey.Position = UDim2.new(0.52, -15, 0, 125)
+getKey.BackgroundColor3 = Color3.fromRGB(45, 45, 52)
+getKey.Text = "Get Key"
+getKey.TextColor3 = Color3.fromRGB(255, 255, 255)
+getKey.TextSize = 16
+getKey.Font = Enum.Font.GothamBold
+getKey.Parent = main
+
+local getCorner = Instance.new("UICorner")
+getCorner.CornerRadius = UDim.new(0, 8)
+getCorner.Parent = getKey
+
+-- MESSAGE
+local status = Instance.new("TextLabel")
+status.Size = UDim2.new(1, -40, 0, 30)
+status.Position = UDim2.new(0, 20, 0, 180)
+status.BackgroundTransparency = 1
+status.Text = ""
+status.TextColor3 = Color3.fromRGB(180, 180, 180)
+status.TextSize = 14
+status.Font = Enum.Font.Gotham
+status.Parent = main
+
+--========================
+-- VERIFICATION
+--========================
+
+check.MouseButton1Click:Connect(function()
+
+    if keyBox.Text == "" then
+        status.Text = "Please enter a key."
+        status.TextColor3 = Color3.fromRGB(255, 180, 80)
+        return
+    end
+
+    if keyBox.Text == CORRECT_KEY then
+
+        status.Text = "Key accepted!"
+        status.TextColor3 = Color3.fromRGB(80, 255, 120)
+
+        task.wait(1)
         gui:Destroy()
 
-        -- =====================================
-        -- DEUXIÈME SYSTÈME
-        -- =====================================
+        --========================================
+        -- CODE À EXÉCUTER APRÈS LA KEY
+        --========================================
 
-        -- Le code de ton deuxième système
-        -- doit être placé ici.
+        print("Key validée !")
 
-        print("Système principal ouvert !")
 
     else
 
-        keyBox.Text = ""
-        keyBox.PlaceholderText = "Key incorrecte !"
+        status.Text = "A3K ON!👹"
+        status.TextColor3 = Color3.fromRGB(255, 80, 80)
 
     end
+end)
+
+--========================
+-- LIEN DISCORD
+--========================
+
+getKey.MouseButton1Click:Connect(function()
+
+    status.Text = "Opening key link..."
+    status.TextColor3 = Color3.fromRGB(180, 180, 255)
+
+    pcall(function()
+        GuiService:OpenBrowserWindow(GET_KEY_URL)
+    end)
+
 end)
