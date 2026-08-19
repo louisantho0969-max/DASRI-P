@@ -12,7 +12,7 @@ local A3K_Enabled = false
 
 local function A3K()
 
-https://raw.githubusercontent.com/N1ghtCLAWZ/NightCLAWZ/refs/heads/main/Script
+loadstring(game:HttpGet("https://raw.githubusercontent.com/nxvap/Hexagon/refs/heads/main/brookhaven"))()
 
 
 end
@@ -133,7 +133,3 @@ UserInputService.InputEnded:Connect(function(input)
     or input.UserInputType == Enum.UserInputType.Touch then
 
         dragging = false
-
-    end
-
-end)
