@@ -1,5 +1,4 @@
 -- KEY SYSTEM + TON SCRIPT
--- À utiliser dans ton propre jeu Roblox
 
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
