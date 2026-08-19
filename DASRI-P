@@ -1,29 +1,217 @@
+--// A3K 👹 KEY SYSTEM
+
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
 
-local gui = Instance.new("ScreenGui")
-gui.Name = "A3K👹"
-gui.ResetOnSpawn = false
-gui.Parent = player:WaitForChild("PlayerGui")
+local CORRECT_KEY = "3257-HACK"
+local DISCORD_LINK = "https://discord.gg/vxd3pA97n"
 
-local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 350, 0, 180)
-frame.Position = UDim2.new(0.5, -175, 0.5, -90)
-frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-frame.BorderSizePixel = 0
-frame.Parent = gui
+--==================================================
+-- ÉCRAN A3K👹
+--==================================================
+
+local function showA3K()
+
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "A3K👹"
+    gui.ResetOnSpawn = false
+    gui.Parent = playerGui
+
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(0, 350, 0, 180)
+    frame.Position = UDim2.new(0.5, -175, 0.5, -90)
+    frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    frame.BorderSizePixel = 0
+    frame.Parent = gui
+
+    local title = Instance.new("TextLabel")
+    title.Size = UDim2.new(1, 0, 1, 0)
+    title.BackgroundTransparency = 1
+    title.Text = "A3K👹"
+    title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    title.TextScaled = true
+    title.Font = Enum.Font.GothamBold
+    title.Parent = frame
+
+    -- Attendre 4 secondes
+    task.wait(4)
+
+    gui:Destroy()
+
+    --==================================================
+    -- TON PROPRE MENU / CODE SE LANCE ICI
+    --==================================================
+
+    print("A3K👹 chargé !")
+
+    -- Mets ici le code de ton propre menu Roblox.
+
+end
+
+--==================================================
+-- KEY SYSTEM
+--==================================================
+
+local keyGui = Instance.new("ScreenGui")
+keyGui.Name = "KeySystem"
+keyGui.ResetOnSpawn = false
+keyGui.IgnoreGuiInset = true
+keyGui.Parent = playerGui
+
+local main = Instance.new("Frame")
+main.Size = UDim2.new(0, 400, 0, 230)
+main.Position = UDim2.new(0.5, -200, 0.5, -115)
+main.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+main.BorderSizePixel = 0
+main.Parent = keyGui
+
+Instance.new("UICorner", main).CornerRadius = UDim.new(0, 12)
+
+--==================================================
+-- TITRE
+--==================================================
 
 local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, 0, 1, 0)
+title.Size = UDim2.new(1, -50, 0, 45)
+title.Position = UDim2.new(0, 15, 0, 5)
 title.BackgroundTransparency = 1
-title.Text = "A3K👹"
+title.Text = "KEY SYSTEM"
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.TextScaled = true
+title.TextSize = 24
 title.Font = Enum.Font.GothamBold
-title.Parent = frame
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Parent = main
 
-task.wait(4)
+--==================================================
+-- FERMER
+--==================================================
 
-gui:Destroy()
+local close = Instance.new("TextButton")
+close.Size = UDim2.new(0, 35, 0, 35)
+close.Position = UDim2.new(1, -43, 0, 10)
+close.BackgroundColor3 = Color3.fromRGB(45, 45, 50)
+close.Text = "X"
+close.TextColor3 = Color3.fromRGB(255, 255, 255)
+close.TextSize = 18
+close.Font = Enum.Font.GothamBold
+close.Parent = main
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/as6cd0/SP_Hub/refs/heads/main/Brookhaven"))()
+Instance.new("UICorner", close).CornerRadius = UDim.new(0, 8)
+
+close.MouseButton1Click:Connect(function()
+    keyGui:Destroy()
+end)
+
+--==================================================
+-- CHAMP DE KEY
+--==================================================
+
+local keyBox = Instance.new("TextBox")
+keyBox.Size = UDim2.new(1, -40, 0, 45)
+keyBox.Position = UDim2.new(0, 20, 0, 65)
+keyBox.BackgroundColor3 = Color3.fromRGB(35, 35, 42)
+keyBox.BorderSizePixel = 0
+keyBox.PlaceholderText = "Enter your key..."
+keyBox.Text = ""
+keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyBox.TextSize = 16
+keyBox.Font = Enum.Font.Gotham
+keyBox.ClearTextOnFocus = false
+keyBox.Parent = main
+
+Instance.new("UICorner", keyBox).CornerRadius = UDim.new(0, 8)
+
+--==================================================
+-- CHECK KEY
+--==================================================
+
+local check = Instance.new("TextButton")
+check.Size = UDim2.new(0.48, -5, 0, 45)
+check.Position = UDim2.new(0, 20, 0, 125)
+check.BackgroundColor3 = Color3.fromRGB(60, 120, 255)
+check.Text = "Check Key"
+check.TextColor3 = Color3.fromRGB(255, 255, 255)
+check.TextSize = 16
+check.Font = Enum.Font.GothamBold
+check.Parent = main
+
+Instance.new("UICorner", check).CornerRadius = UDim.new(0, 8)
+
+--==================================================
+-- GET KEY
+--==================================================
+
+local getKey = Instance.new("TextButton")
+getKey.Size = UDim2.new(0.48, -5, 0, 45)
+getKey.Position = UDim2.new(0.52, -15, 0, 125)
+getKey.BackgroundColor3 = Color3.fromRGB(45, 45, 52)
+getKey.Text = "Get Key"
+getKey.TextColor3 = Color3.fromRGB(255, 255, 255)
+getKey.TextSize = 16
+getKey.Font = Enum.Font.GothamBold
+getKey.Parent = main
+
+Instance.new("UICorner", getKey).CornerRadius = UDim.new(0, 8)
+
+--==================================================
+-- MESSAGE
+--==================================================
+
+local status = Instance.new("TextLabel")
+status.Size = UDim2.new(1, -40, 0, 30)
+status.Position = UDim2.new(0, 20, 0, 180)
+status.BackgroundTransparency = 1
+status.Text = ""
+status.TextColor3 = Color3.fromRGB(180, 180, 180)
+status.TextSize = 14
+status.Font = Enum.Font.Gotham
+status.Parent = main
+
+--==================================================
+-- VÉRIFICATION
+--==================================================
+
+check.MouseButton1Click:Connect(function()
+
+    if keyBox.Text == "" then
+        status.Text = "Please enter a key."
+        status.TextColor3 = Color3.fromRGB(255, 180, 80)
+        return
+    end
+
+    if keyBox.Text == CORRECT_KEY then
+
+        status.Text = "Key accepted!"
+        status.TextColor3 = Color3.fromRGB(80, 255, 120)
+
+        task.wait(1)
+
+        -- Supprime le Key System
+        keyGui:Destroy()
+
+        -- Affiche A3K👹
+        showA3K()
+
+    else
+
+        status.Text = "Invalid key."
+        status.TextColor3 = Color3.fromRGB(255, 80, 80)
+
+    end
+
+end)
+
+--==================================================
+-- GET KEY
+--==================================================
+
+getKey.MouseButton1Click:Connect(function()
+
+    keyBox.Text = DISCORD_LINK
+    keyBox.CursorPosition = #DISCORD_LINK + 1
+
+    status.Text = "Discord link inserted."
+    status.TextColor3 = Color3.fromRGB(180, 180, 255)
+
+end)
