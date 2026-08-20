@@ -4,18 +4,23 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
+--========================
+-- CONFIGURATION
+--========================
+
 local CORRECT_KEY = "3257-HACK"
 local DISCORD_LINK = "https://discord.gg/vxd3pA97n"
 
---==================================================
--- ÉCRAN A3K👹
---==================================================
+--========================
+-- ÉCRAN A3K APRÈS LA CLÉ
+--========================
 
 local function showA3K()
 
     local gui = Instance.new("ScreenGui")
     gui.Name = "A3K👹"
     gui.ResetOnSpawn = false
+    gui.IgnoreGuiInset = true
     gui.Parent = playerGui
 
     local frame = Instance.new("Frame")
@@ -24,6 +29,10 @@ local function showA3K()
     frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     frame.BorderSizePixel = 0
     frame.Parent = gui
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 12)
+    corner.Parent = frame
 
     local title = Instance.new("TextLabel")
     title.Size = UDim2.new(1, 0, 1, 0)
@@ -34,8 +43,15 @@ local function showA3K()
     title.Font = Enum.Font.GothamBold
     title.Parent = frame
 
+    -- Attendre 4 secondes
     task.wait(4)
+
+    -- Faire disparaître l'écran A3K
     gui:Destroy()
+
+    --==================================================
+    -- TON SCRIPT À LANCER APRÈS LES 4 SECONDES
+    --==================================================
 
     -- Script from https://deltascript.dev --
 
@@ -43,9 +59,9 @@ loadstring(game:HttpGet("https://pastebin.com/raw/395Wwfjh"))()
 
 end
 
---==================================================
+--========================
 -- KEY SYSTEM
---==================================================
+--========================
 
 local keyGui = Instance.new("ScreenGui")
 keyGui.Name = "KeySystem"
@@ -54,6 +70,7 @@ keyGui.IgnoreGuiInset = true
 keyGui.Parent = playerGui
 
 local main = Instance.new("Frame")
+main.Name = "Main"
 main.Size = UDim2.new(0, 400, 0, 230)
 main.Position = UDim2.new(0.5, -200, 0.5, -115)
 main.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
@@ -64,7 +81,10 @@ local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(0, 12)
 corner.Parent = main
 
+--========================
 -- TITRE
+--========================
+
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, -50, 0, 45)
 title.Position = UDim2.new(0, 15, 0, 5)
@@ -76,7 +96,10 @@ title.Font = Enum.Font.GothamBold
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = main
 
+--========================
 -- FERMER
+--========================
+
 local close = Instance.new("TextButton")
 close.Size = UDim2.new(0, 35, 0, 35)
 close.Position = UDim2.new(1, -43, 0, 10)
@@ -95,13 +118,17 @@ close.MouseButton1Click:Connect(function()
     keyGui:Destroy()
 end)
 
+--========================
 -- CHAMP DE KEY
+--========================
+
 local keyBox = Instance.new("TextBox")
 keyBox.Size = UDim2.new(1, -40, 0, 45)
 keyBox.Position = UDim2.new(0, 20, 0, 65)
 keyBox.BackgroundColor3 = Color3.fromRGB(35, 35, 42)
 keyBox.BorderSizePixel = 0
 keyBox.PlaceholderText = "Enter your key..."
+keyBox.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
 keyBox.Text = ""
 keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
 keyBox.TextSize = 16
@@ -113,7 +140,10 @@ local keyCorner = Instance.new("UICorner")
 keyCorner.CornerRadius = UDim.new(0, 8)
 keyCorner.Parent = keyBox
 
+--========================
 -- CHECK KEY
+--========================
+
 local check = Instance.new("TextButton")
 check.Size = UDim2.new(0.48, -5, 0, 45)
 check.Position = UDim2.new(0, 20, 0, 125)
@@ -128,7 +158,10 @@ local checkCorner = Instance.new("UICorner")
 checkCorner.CornerRadius = UDim.new(0, 8)
 checkCorner.Parent = check
 
+--========================
 -- GET KEY
+--========================
+
 local getKey = Instance.new("TextButton")
 getKey.Size = UDim2.new(0.48, -5, 0, 45)
 getKey.Position = UDim2.new(0.52, -15, 0, 125)
@@ -143,7 +176,10 @@ local getCorner = Instance.new("UICorner")
 getCorner.CornerRadius = UDim.new(0, 8)
 getCorner.Parent = getKey
 
--- STATUS
+--========================
+-- MESSAGE
+--========================
+
 local status = Instance.new("TextLabel")
 status.Size = UDim2.new(1, -40, 0, 30)
 status.Position = UDim2.new(0, 20, 0, 180)
@@ -154,7 +190,10 @@ status.TextSize = 14
 status.Font = Enum.Font.Gotham
 status.Parent = main
 
+--========================
 -- VÉRIFICATION
+--========================
+
 check.MouseButton1Click:Connect(function()
 
     if keyBox.Text == "" then
@@ -169,8 +208,11 @@ check.MouseButton1Click:Connect(function()
         status.TextColor3 = Color3.fromRGB(80, 255, 120)
 
         task.wait(1)
+
+        -- Retirer le Key System
         keyGui:Destroy()
 
+        -- Afficher A3K👹 pendant 4 secondes
         showA3K()
 
     else
@@ -179,12 +221,15 @@ check.MouseButton1Click:Connect(function()
         status.TextColor3 = Color3.fromRGB(255, 80, 80)
 
     end
-
 end)
 
+--========================
 -- GET KEY
+--========================
+
 getKey.MouseButton1Click:Connect(function()
 
+    -- Le lien apparaît dans la barre de clé
     keyBox.Text = DISCORD_LINK
     keyBox.CursorPosition = #DISCORD_LINK + 1
 
