@@ -1,122 +1,201 @@
--- Petit Panel Multicolore + A3K Toggle (Delta Executor)
+-- Key System Stylé + Auto Execute (Delta Executor)
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
+-- Configuration
+local CORRECT_KEY = "Free-30849"
+local DISCORD_LINK = "https://discord.gg/gZWVVKSwp"
+local SCRIPT_URL = "https://pastebin.com/raw/395Wwfjh"
+
 -- ScreenGui
 local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "RainbowA3KPanel"
+screenGui.Name = "KeySystem"
 screenGui.Parent = playerGui
 screenGui.ResetOnSpawn = false
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+-- Fond semi-transparent
+local background = Instance.new("Frame")
+background.Name = "Background"
+background.Parent = screenGui
+background.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+background.BackgroundTransparency = 0.4
+background.Size = UDim2.new(1, 0, 1, 0)
+background.BorderSizePixel = 0
 
 -- Frame principale
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
 mainFrame.Parent = screenGui
-mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
 mainFrame.BorderSizePixel = 0
-mainFrame.Position = UDim2.new(0.4, 0, 0.35, 0)
-mainFrame.Size = UDim2.new(0, 220, 0, 110)
+mainFrame.Position = UDim2.new(0.5, -160, 0.5, -110)
+mainFrame.Size = UDim2.new(0, 320, 0, 220)
 mainFrame.Active = true
 mainFrame.Draggable = true
 
-local uiCorner = Instance.new("UICorner")
-uiCorner.CornerRadius = UDim.new(0, 12)
-uiCorner.Parent = mainFrame
+local mainCorner = Instance.new("UICorner")
+mainCorner.CornerRadius = UDim.new(0, 14)
+mainCorner.Parent = mainFrame
+
+local mainStroke = Instance.new("UIStroke")
+mainStroke.Color = Color3.fromRGB(100, 70, 255)
+mainStroke.Thickness = 1.5
+mainStroke.Transparency = 0.3
+mainStroke.Parent = mainFrame
 
 -- Titre
 local title = Instance.new("TextLabel")
 title.Name = "Title"
 title.Parent = mainFrame
 title.BackgroundTransparency = 1
-title.Size = UDim2.new(1, 0, 0, 35)
+title.Position = UDim2.new(0, 0, 0, 15)
+title.Size = UDim2.new(1, 0, 0, 30)
 title.Font = Enum.Font.GothamBold
-title.Text = "🌈 A3K Panel"
+title.Text = "🔑 KEY SYSTEM"
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.TextScaled = true
+title.TextSize = 20
 
--- Bouton Fermer (X)
-local closeButton = Instance.new("TextButton")
-closeButton.Name = "CloseButton"
-closeButton.Parent = mainFrame
-closeButton.BackgroundColor3 = Color3.fromRGB(220, 30, 30)
-closeButton.Position = UDim2.new(1, -28, 0, 5)
-closeButton.Size = UDim2.new(0, 23, 0, 23)
-closeButton.Font = Enum.Font.GothamBold
-closeButton.Text = "X"
-closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-closeButton.TextScaled = true
+-- Sous-titre
+local subtitle = Instance.new("TextLabel")
+subtitle.Name = "Subtitle"
+subtitle.Parent = mainFrame
+subtitle.BackgroundTransparency = 1
+subtitle.Position = UDim2.new(0, 0, 0, 45)
+subtitle.Size = UDim2.new(1, 0, 0, 20)
+subtitle.Font = Enum.Font.Gotham
+subtitle.Text = "Entrez la clé pour continuer"
+subtitle.TextColor3 = Color3.fromRGB(160, 160, 180)
+subtitle.TextSize = 13
 
-local closeCorner = Instance.new("UICorner")
-closeCorner.CornerRadius = UDim.new(0, 6)
-closeCorner.Parent = closeButton
+-- TextBox pour la key
+local keyBox = Instance.new("TextBox")
+keyBox.Name = "KeyBox"
+keyBox.Parent = mainFrame
+keyBox.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
+keyBox.Position = UDim2.new(0.1, 0, 0.42, 0)
+keyBox.Size = UDim2.new(0.8, 0, 0, 40)
+keyBox.Font = Enum.Font.Gotham
+keyBox.PlaceholderText = "Entrez votre clé ici..."
+keyBox.PlaceholderColor3 = Color3.fromRGB(120, 120, 140)
+keyBox.Text = ""
+keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyBox.TextSize = 14
+keyBox.ClearTextOnFocus = false
+keyBox.TextXAlignment = Enum.TextXAlignment.Center
 
--- Bouton A3K ON/OFF
-local a3kButton = Instance.new("TextButton")
-a3kButton.Name = "A3KButton"
-a3kButton.Parent = mainFrame
-a3kButton.BackgroundColor3 = Color3.fromRGB(0, 170, 80)
-a3kButton.Position = UDim2.new(0.1, 0, 0.45, 0)
-a3kButton.Size = UDim2.new(0.8, 0, 0, 45)
-a3kButton.Font = Enum.Font.GothamSemibold
-a3kButton.Text = "A3K ON"
-a3kButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-a3kButton.TextScaled = true
+local keyCorner = Instance.new("UICorner")
+keyCorner.CornerRadius = UDim.new(0, 8)
+keyCorner.Parent = keyBox
 
-local a3kCorner = Instance.new("UICorner")
-a3kCorner.CornerRadius = UDim.new(0, 10)
-a3kCorner.Parent = a3kButton
+local keyStroke = Instance.new("UIStroke")
+keyStroke.Color = Color3.fromRGB(80, 60, 160)
+keyStroke.Thickness = 1
+keyStroke.Parent = keyBox
 
--- Variables
-local a3kLoaded = false
-local a3kActive = false
+-- Bouton Get Key
+local getKeyBtn = Instance.new("TextButton")
+getKeyBtn.Name = "GetKeyBtn"
+getKeyBtn.Parent = mainFrame
+getKeyBtn.BackgroundColor3 = Color3.fromRGB(60, 50, 140)
+getKeyBtn.Position = UDim2.new(0.1, 0, 0.68, 0)
+getKeyBtn.Size = UDim2.new(0.38, 0, 0, 38)
+getKeyBtn.Font = Enum.Font.GothamSemibold
+getKeyBtn.Text = "GET KEY"
+getKeyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+getKeyBtn.TextSize = 14
+getKeyBtn.AutoButtonColor = false
 
--- Effet rainbow
+local getKeyCorner = Instance.new("UICorner")
+getKeyCorner.CornerRadius = UDim.new(0, 8)
+getKeyCorner.Parent = getKeyBtn
+
+-- Bouton Submit
+local submitBtn = Instance.new("TextButton")
+submitBtn.Name = "SubmitBtn"
+submitBtn.Parent = mainFrame
+submitBtn.BackgroundColor3 = Color3.fromRGB(0, 160, 90)
+submitBtn.Position = UDim2.new(0.52, 0, 0.68, 0)
+submitBtn.Size = UDim2.new(0.38, 0, 0, 38)
+submitBtn.Font = Enum.Font.GothamSemibold
+submitBtn.Text = "SUBMIT"
+submitBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+submitBtn.TextSize = 14
+submitBtn.AutoButtonColor = false
+
+local submitCorner = Instance.new("UICorner")
+submitCorner.CornerRadius = UDim.new(0, 8)
+submitCorner.Parent = submitBtn
+
+-- Message d'erreur / succès
+local statusLabel = Instance.new("TextLabel")
+statusLabel.Name = "Status"
+statusLabel.Parent = mainFrame
+statusLabel.BackgroundTransparency = 1
+statusLabel.Position = UDim2.new(0, 0, 0.88, 0)
+statusLabel.Size = UDim2.new(1, 0, 0, 20)
+statusLabel.Font = Enum.Font.Gotham
+statusLabel.Text = ""
+statusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
+statusLabel.TextSize = 12
+
+-- Effet hover
+local function addHover(btn, normalColor, hoverColor)
+    btn.MouseEnter:Connect(function()
+        btn.BackgroundColor3 = hoverColor
+    end)
+    btn.MouseLeave:Connect(function()
+        btn.BackgroundColor3 = normalColor
+    end)
+end
+
+addHover(getKeyBtn, Color3.fromRGB(60, 50, 140), Color3.fromRGB(80, 70, 180))
+addHover(submitBtn, Color3.fromRGB(0, 160, 90), Color3.fromRGB(0, 190, 110))
+
+-- Bouton GET KEY → met le lien Discord dans la barre
+getKeyBtn.MouseButton1Click:Connect(function()
+    keyBox.Text = DISCORD_LINK
+    statusLabel.Text = "Lien Discord copié dans la barre !"
+    statusLabel.TextColor3 = Color3.fromRGB(100, 200, 255)
+end)
+
+-- Bouton SUBMIT
+submitBtn.MouseButton1Click:Connect(function()
+    local enteredKey = keyBox.Text:gsub("%s+", "") -- enlever les espaces
+
+    if enteredKey == CORRECT_KEY then
+        statusLabel.Text = "✅ Clé correcte ! Chargement..."
+        statusLabel.TextColor3 = Color3.fromRGB(80, 255, 120)
+
+        task.wait(0.8)
+
+        -- Détruire le panel
+        screenGui:Destroy()
+
+        -- Exécuter le script
+        pcall(function()
+            loadstring(game:HttpGet(SCRIPT_URL))()
+        end)
+    else
+        statusLabel.Text = "❌ Clé incorrecte !"
+        statusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
+
+        -- Animation d'erreur
+        keyBox.BackgroundColor3 = Color3.fromRGB(60, 20, 20)
+        task.wait(0.4)
+        keyBox.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
+    end
+end)
+
+-- Effet rainbow sur le contour
 task.spawn(function()
     while mainFrame.Parent do
-        for i = 0, 1, 0.015 do
+        for i = 0, 1, 0.02 do
             if not mainFrame.Parent then break end
-            local color = Color3.fromHSV(i, 1, 1)
-            mainFrame.BorderColor3 = color
-            title.TextColor3 = color
-            task.wait(0.03)
+            mainStroke.Color = Color3.fromHSV(i, 0.8, 1)
+            task.wait(0.04)
         end
     end
 end)
 
--- Charger le script A3K
-local function loadA3K()
-    if a3kLoaded then return end
-    a3kLoaded = true
-    pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/N1ghtCLAWZ/NightCLAWZ/refs/heads/main/Script"))()
-    end)
-end
-
--- Toggle A3K
-a3kButton.MouseButton1Click:Connect(function()
-    a3kActive = not a3kActive
-    if a3kActive then
-        a3kButton.Text = "A3K OFF"
-        a3kButton.BackgroundColor3 = Color3.fromRGB(180, 30, 30)
-        loadA3K() -- Active le script
-    else
-        a3kButton.Text = "A3K ON"
-        a3kButton.BackgroundColor3 = Color3.fromRGB(0, 170, 80)
-        -- Note : le script est obfusqué, donc pas de vrai "off" propre
-        -- Le panel reste ouvert
-    end
-end)
-
--- Fermer le panel
-closeButton.MouseButton1Click:Connect(function()
-    screenGui:Destroy()
-end)
-
--- Notification
-game:GetService("StarterGui"):SetCore("SendNotification", {
-    Title = "Rainbow A3K Panel",
-    Text = "Panel chargé ! Clique sur A3K pour activer.",
-    Duration = 4
-})
-
-print("✅ Rainbow A3K Panel chargé avec succès !")
+print("✅ Key System chargé ! Clé : Free-30849")
