@@ -1,239 +1,122 @@
---// A3K 👹 KEY SYSTEM
-
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
+-- Petit Panel Multicolore + A3K Toggle (Delta Executor)
+local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
---========================
--- CONFIGURATION
---========================
+-- ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "RainbowA3KPanel"
+screenGui.Parent = playerGui
+screenGui.ResetOnSpawn = false
 
-local CORRECT_KEY = "3257-HACK"
-local DISCORD_LINK = "https://discord.gg/vxd3pA97n"
+-- Frame principale
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Parent = screenGui
+mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+mainFrame.BorderSizePixel = 0
+mainFrame.Position = UDim2.new(0.4, 0, 0.35, 0)
+mainFrame.Size = UDim2.new(0, 220, 0, 110)
+mainFrame.Active = true
+mainFrame.Draggable = true
 
---========================
--- ÉCRAN A3K APRÈS LA CLÉ
---========================
+local uiCorner = Instance.new("UICorner")
+uiCorner.CornerRadius = UDim.new(0, 12)
+uiCorner.Parent = mainFrame
 
-local function showA3K()
-
-    local gui = Instance.new("ScreenGui")
-    gui.Name = "A3K👹"
-    gui.ResetOnSpawn = false
-    gui.IgnoreGuiInset = true
-    gui.Parent = playerGui
-
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 350, 0, 180)
-    frame.Position = UDim2.new(0.5, -175, 0.5, -90)
-    frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    frame.BorderSizePixel = 0
-    frame.Parent = gui
-
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 12)
-    corner.Parent = frame
-
-    local title = Instance.new("TextLabel")
-    title.Size = UDim2.new(1, 0, 1, 0)
-    title.BackgroundTransparency = 1
-    title.Text = "A3K👹"
-    title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    title.TextScaled = true
-    title.Font = Enum.Font.GothamBold
-    title.Parent = frame
-
-    -- Attendre 4 secondes
-    task.wait(4)
-
-    -- Faire disparaître l'écran A3K
-    gui:Destroy()
-
-    --==================================================
-    -- TON SCRIPT À LANCER APRÈS LES 4 SECONDES
-    --==================================================
-
-    -- Script from https://deltascript.dev --
-
-loadstring(game:HttpGet("https://pastebin.com/raw/395Wwfjh"))()
-
-end
-
---========================
--- KEY SYSTEM
---========================
-
-local keyGui = Instance.new("ScreenGui")
-keyGui.Name = "KeySystem"
-keyGui.ResetOnSpawn = false
-keyGui.IgnoreGuiInset = true
-keyGui.Parent = playerGui
-
-local main = Instance.new("Frame")
-main.Name = "Main"
-main.Size = UDim2.new(0, 400, 0, 230)
-main.Position = UDim2.new(0.5, -200, 0.5, -115)
-main.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
-main.BorderSizePixel = 0
-main.Parent = keyGui
-
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 12)
-corner.Parent = main
-
---========================
--- TITRE
---========================
-
+-- Titre
 local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, -50, 0, 45)
-title.Position = UDim2.new(0, 15, 0, 5)
+title.Name = "Title"
+title.Parent = mainFrame
 title.BackgroundTransparency = 1
-title.Text = "KEY SYSTEM"
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.TextSize = 24
+title.Size = UDim2.new(1, 0, 0, 35)
 title.Font = Enum.Font.GothamBold
-title.TextXAlignment = Enum.TextXAlignment.Left
-title.Parent = main
+title.Text = "🌈 A3K Panel"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextScaled = true
 
---========================
--- FERMER
---========================
-
-local close = Instance.new("TextButton")
-close.Size = UDim2.new(0, 35, 0, 35)
-close.Position = UDim2.new(1, -43, 0, 10)
-close.BackgroundColor3 = Color3.fromRGB(45, 45, 50)
-close.Text = "X"
-close.TextColor3 = Color3.fromRGB(255, 255, 255)
-close.TextSize = 18
-close.Font = Enum.Font.GothamBold
-close.Parent = main
+-- Bouton Fermer (X)
+local closeButton = Instance.new("TextButton")
+closeButton.Name = "CloseButton"
+closeButton.Parent = mainFrame
+closeButton.BackgroundColor3 = Color3.fromRGB(220, 30, 30)
+closeButton.Position = UDim2.new(1, -28, 0, 5)
+closeButton.Size = UDim2.new(0, 23, 0, 23)
+closeButton.Font = Enum.Font.GothamBold
+closeButton.Text = "X"
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.TextScaled = true
 
 local closeCorner = Instance.new("UICorner")
-closeCorner.CornerRadius = UDim.new(0, 8)
-closeCorner.Parent = close
+closeCorner.CornerRadius = UDim.new(0, 6)
+closeCorner.Parent = closeButton
 
-close.MouseButton1Click:Connect(function()
-    keyGui:Destroy()
+-- Bouton A3K ON/OFF
+local a3kButton = Instance.new("TextButton")
+a3kButton.Name = "A3KButton"
+a3kButton.Parent = mainFrame
+a3kButton.BackgroundColor3 = Color3.fromRGB(0, 170, 80)
+a3kButton.Position = UDim2.new(0.1, 0, 0.45, 0)
+a3kButton.Size = UDim2.new(0.8, 0, 0, 45)
+a3kButton.Font = Enum.Font.GothamSemibold
+a3kButton.Text = "A3K ON"
+a3kButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+a3kButton.TextScaled = true
+
+local a3kCorner = Instance.new("UICorner")
+a3kCorner.CornerRadius = UDim.new(0, 10)
+a3kCorner.Parent = a3kButton
+
+-- Variables
+local a3kLoaded = false
+local a3kActive = false
+
+-- Effet rainbow
+task.spawn(function()
+    while mainFrame.Parent do
+        for i = 0, 1, 0.015 do
+            if not mainFrame.Parent then break end
+            local color = Color3.fromHSV(i, 1, 1)
+            mainFrame.BorderColor3 = color
+            title.TextColor3 = color
+            task.wait(0.03)
+        end
+    end
 end)
 
---========================
--- CHAMP DE KEY
---========================
+-- Charger le script A3K
+local function loadA3K()
+    if a3kLoaded then return end
+    a3kLoaded = true
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/N1ghtCLAWZ/NightCLAWZ/refs/heads/main/Script"))()
+    end)
+end
 
-local keyBox = Instance.new("TextBox")
-keyBox.Size = UDim2.new(1, -40, 0, 45)
-keyBox.Position = UDim2.new(0, 20, 0, 65)
-keyBox.BackgroundColor3 = Color3.fromRGB(35, 35, 42)
-keyBox.BorderSizePixel = 0
-keyBox.PlaceholderText = "Enter your key..."
-keyBox.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
-keyBox.Text = ""
-keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-keyBox.TextSize = 16
-keyBox.Font = Enum.Font.Gotham
-keyBox.ClearTextOnFocus = false
-keyBox.Parent = main
-
-local keyCorner = Instance.new("UICorner")
-keyCorner.CornerRadius = UDim.new(0, 8)
-keyCorner.Parent = keyBox
-
---========================
--- CHECK KEY
---========================
-
-local check = Instance.new("TextButton")
-check.Size = UDim2.new(0.48, -5, 0, 45)
-check.Position = UDim2.new(0, 20, 0, 125)
-check.BackgroundColor3 = Color3.fromRGB(60, 120, 255)
-check.Text = "Check Key"
-check.TextColor3 = Color3.fromRGB(255, 255, 255)
-check.TextSize = 16
-check.Font = Enum.Font.GothamBold
-check.Parent = main
-
-local checkCorner = Instance.new("UICorner")
-checkCorner.CornerRadius = UDim.new(0, 8)
-checkCorner.Parent = check
-
---========================
--- GET KEY
---========================
-
-local getKey = Instance.new("TextButton")
-getKey.Size = UDim2.new(0.48, -5, 0, 45)
-getKey.Position = UDim2.new(0.52, -15, 0, 125)
-getKey.BackgroundColor3 = Color3.fromRGB(45, 45, 52)
-getKey.Text = "Get Key"
-getKey.TextColor3 = Color3.fromRGB(255, 255, 255)
-getKey.TextSize = 16
-getKey.Font = Enum.Font.GothamBold
-getKey.Parent = main
-
-local getCorner = Instance.new("UICorner")
-getCorner.CornerRadius = UDim.new(0, 8)
-getCorner.Parent = getKey
-
---========================
--- MESSAGE
---========================
-
-local status = Instance.new("TextLabel")
-status.Size = UDim2.new(1, -40, 0, 30)
-status.Position = UDim2.new(0, 20, 0, 180)
-status.BackgroundTransparency = 1
-status.Text = ""
-status.TextColor3 = Color3.fromRGB(180, 180, 180)
-status.TextSize = 14
-status.Font = Enum.Font.Gotham
-status.Parent = main
-
---========================
--- VÉRIFICATION
---========================
-
-check.MouseButton1Click:Connect(function()
-
-    if keyBox.Text == "" then
-        status.Text = "Please enter a key."
-        status.TextColor3 = Color3.fromRGB(255, 180, 80)
-        return
-    end
-
-    if keyBox.Text == CORRECT_KEY then
-
-        status.Text = "Key accepted!"
-        status.TextColor3 = Color3.fromRGB(80, 255, 120)
-
-        task.wait(1)
-
-        -- Retirer le Key System
-        keyGui:Destroy()
-
-        -- Afficher A3K👹 pendant 4 secondes
-        showA3K()
-
+-- Toggle A3K
+a3kButton.MouseButton1Click:Connect(function()
+    a3kActive = not a3kActive
+    if a3kActive then
+        a3kButton.Text = "A3K OFF"
+        a3kButton.BackgroundColor3 = Color3.fromRGB(180, 30, 30)
+        loadA3K() -- Active le script
     else
-
-        status.Text = "Invalid key."
-        status.TextColor3 = Color3.fromRGB(255, 80, 80)
-
+        a3kButton.Text = "A3K ON"
+        a3kButton.BackgroundColor3 = Color3.fromRGB(0, 170, 80)
+        -- Note : le script est obfusqué, donc pas de vrai "off" propre
+        -- Le panel reste ouvert
     end
 end)
 
---========================
--- GET KEY
---========================
-
-getKey.MouseButton1Click:Connect(function()
-
-    -- Le lien apparaît dans la barre de clé
-    keyBox.Text = DISCORD_LINK
-    keyBox.CursorPosition = #DISCORD_LINK + 1
-
-    status.Text = "Discord link inserted."
-    status.TextColor3 = Color3.fromRGB(180, 180, 255)
-
+-- Fermer le panel
+closeButton.MouseButton1Click:Connect(function()
+    screenGui:Destroy()
 end)
+
+-- Notification
+game:GetService("StarterGui"):SetCore("SendNotification", {
+    Title = "Rainbow A3K Panel",
+    Text = "Panel chargé ! Clique sur A3K pour activer.",
+    Duration = 4
+})
+
+print("✅ Rainbow A3K Panel chargé avec succès !")
