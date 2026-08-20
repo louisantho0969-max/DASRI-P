@@ -34,18 +34,12 @@ local function showA3K()
     title.Font = Enum.Font.GothamBold
     title.Parent = frame
 
-    -- Attendre 4 secondes
     task.wait(4)
 
     gui:Destroy()
 
-    --==================================================
-    -- TON PROPRE MENU / CODE SE LANCE ICI
-    --==================================================
-
-    print("A3K👹 chargé !")
-
-    -- Mets ici le code de ton propre menu Roblox.
+    -- REMPLACE UNIQUEMENT LES ... CI-DESSOUS
+    ...
 
 end
 
@@ -66,12 +60,11 @@ main.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
 main.BorderSizePixel = 0
 main.Parent = keyGui
 
-Instance.new("UICorner", main).CornerRadius = UDim.new(0, 12)
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 12)
+corner.Parent = main
 
---==================================================
 -- TITRE
---==================================================
-
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, -50, 0, 45)
 title.Position = UDim2.new(0, 15, 0, 5)
@@ -83,10 +76,7 @@ title.Font = Enum.Font.GothamBold
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = main
 
---==================================================
 -- FERMER
---==================================================
-
 local close = Instance.new("TextButton")
 close.Size = UDim2.new(0, 35, 0, 35)
 close.Position = UDim2.new(1, -43, 0, 10)
@@ -97,16 +87,15 @@ close.TextSize = 18
 close.Font = Enum.Font.GothamBold
 close.Parent = main
 
-Instance.new("UICorner", close).CornerRadius = UDim.new(0, 8)
+local closeCorner = Instance.new("UICorner")
+closeCorner.CornerRadius = UDim.new(0, 8)
+closeCorner.Parent = close
 
 close.MouseButton1Click:Connect(function()
     keyGui:Destroy()
 end)
 
---==================================================
 -- CHAMP DE KEY
---==================================================
-
 local keyBox = Instance.new("TextBox")
 keyBox.Size = UDim2.new(1, -40, 0, 45)
 keyBox.Position = UDim2.new(0, 20, 0, 65)
@@ -120,12 +109,11 @@ keyBox.Font = Enum.Font.Gotham
 keyBox.ClearTextOnFocus = false
 keyBox.Parent = main
 
-Instance.new("UICorner", keyBox).CornerRadius = UDim.new(0, 8)
+local keyCorner = Instance.new("UICorner")
+keyCorner.CornerRadius = UDim.new(0, 8)
+keyCorner.Parent = keyBox
 
---==================================================
 -- CHECK KEY
---==================================================
-
 local check = Instance.new("TextButton")
 check.Size = UDim2.new(0.48, -5, 0, 45)
 check.Position = UDim2.new(0, 20, 0, 125)
@@ -136,12 +124,11 @@ check.TextSize = 16
 check.Font = Enum.Font.GothamBold
 check.Parent = main
 
-Instance.new("UICorner", check).CornerRadius = UDim.new(0, 8)
+local checkCorner = Instance.new("UICorner")
+checkCorner.CornerRadius = UDim.new(0, 8)
+checkCorner.Parent = check
 
---==================================================
 -- GET KEY
---==================================================
-
 local getKey = Instance.new("TextButton")
 getKey.Size = UDim2.new(0.48, -5, 0, 45)
 getKey.Position = UDim2.new(0.52, -15, 0, 125)
@@ -152,12 +139,11 @@ getKey.TextSize = 16
 getKey.Font = Enum.Font.GothamBold
 getKey.Parent = main
 
-Instance.new("UICorner", getKey).CornerRadius = UDim.new(0, 8)
+local getCorner = Instance.new("UICorner")
+getCorner.CornerRadius = UDim.new(0, 8)
+getCorner.Parent = getKey
 
---==================================================
--- MESSAGE
---==================================================
-
+-- STATUS
 local status = Instance.new("TextLabel")
 status.Size = UDim2.new(1, -40, 0, 30)
 status.Position = UDim2.new(0, 20, 0, 180)
@@ -187,10 +173,8 @@ check.MouseButton1Click:Connect(function()
 
         task.wait(1)
 
-        -- Supprime le Key System
         keyGui:Destroy()
 
-        -- Affiche A3K👹
         showA3K()
 
     else
