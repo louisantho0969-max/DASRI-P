@@ -39,8 +39,9 @@ local function showA3K()
     gui:Destroy()
 
     -- REMPLACE UNIQUEMENT LES ... CI-DESSOUS
-    ...
 
+loadstring(game:HttpGet("https://pastebin.com/raw/395Wwfjh"))()
+- [ ] 
 end
 
 --==================================================
