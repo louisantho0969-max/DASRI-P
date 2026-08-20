@@ -35,13 +35,12 @@ local function showA3K()
     title.Parent = frame
 
     task.wait(4)
-
     gui:Destroy()
 
-    -- REMPLACE UNIQUEMENT LES ... CI-DESSOUS
+    -- Script from https://deltascript.dev --
 
 loadstring(game:HttpGet("https://pastebin.com/raw/395Wwfjh"))()
-- [ ] 
+
 end
 
 --==================================================
@@ -155,10 +154,7 @@ status.TextSize = 14
 status.Font = Enum.Font.Gotham
 status.Parent = main
 
---==================================================
 -- VÉRIFICATION
---==================================================
-
 check.MouseButton1Click:Connect(function()
 
     if keyBox.Text == "" then
@@ -173,7 +169,6 @@ check.MouseButton1Click:Connect(function()
         status.TextColor3 = Color3.fromRGB(80, 255, 120)
 
         task.wait(1)
-
         keyGui:Destroy()
 
         showA3K()
@@ -187,10 +182,7 @@ check.MouseButton1Click:Connect(function()
 
 end)
 
---==================================================
 -- GET KEY
---==================================================
-
 getKey.MouseButton1Click:Connect(function()
 
     keyBox.Text = DISCORD_LINK
